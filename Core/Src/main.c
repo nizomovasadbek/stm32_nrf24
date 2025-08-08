@@ -107,8 +107,8 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	ota_init();
-//	copy_text();
+//	ota_init();
+	copy_text();
 	flash_unlock();
   /* USER CODE END 1 */
 
