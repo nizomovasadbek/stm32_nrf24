@@ -1,0 +1,6 @@
+*.hex
+*.build
+*.bin
+*.elf
+/Debug/
+/Release/
