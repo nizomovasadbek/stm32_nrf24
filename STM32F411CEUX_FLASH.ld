@@ -165,12 +165,12 @@ SECTIONS
     __bss_end__ = _ebss;
   } >RAM
   
-    .ota_section : {
-  		. = ALIGN(4);
-  		_ota_begin = .;
-  		*(.ota_section)
-  		_ota_end = .;
-  		. = ALIGN(4);
+   .ota_section : {
+  	 . = ALIGN(4);
+  	 _ota_begin = .;
+  	 *(.ota_section)
+  	 _ota_end = .;
+  	 . = ALIGN(4);
   } >RAM AT> FLASH
   _ota_loadaddr = LOADADDR(.ota_section);
 

@@ -32,6 +32,8 @@ OTAFUS void flash_unlock(void) {
 		*((u32*) kFLASH.FLASHKEY) = F_KEY1;
 		*((u32*) kFLASH.FLASHKEY) = F_KEY2;
 	}
+
+	kFLASH.FLASH_CR |= (1 << PSIZE);
 }
 
 OTAFUS void flash_lock(void) {
