@@ -28,6 +28,7 @@ OTAFUS u8 SPI1_receive(void) {
 OTAFUS void flash_unlock(void) {
 	while(kFLASH.FLASH_SR & (1 << FLASH_BUSY));
 
+
 	if(kFLASH.FLASH_CR & (1 << LOCK)) {
 		kFLASH.FLASHKEY = F_KEY1;
 		kFLASH.FLASHKEY = F_KEY2;
