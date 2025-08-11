@@ -53,7 +53,6 @@ OTAFUS void flash_erase() {
 	flash_lock();
 }
 
-
 OTAFUS void flash_write(u32 addr, u8 data) {
 	flash_unlock();
 
@@ -65,4 +64,3 @@ OTAFUS void flash_write(u32 addr, u8 data) {
 	flash_lock();
 	while(kFLASH.FLASH_SR & (1 << FLASH_BUSY));
 }
-

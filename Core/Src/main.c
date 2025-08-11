@@ -109,7 +109,6 @@ int main(void)
   /* USER CODE BEGIN 1 */
 //	ota_init();
 	copy_text();
-	flash_write(0x08000000, 0xF3);
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -140,7 +139,6 @@ int main(void)
   HAL_Delay(5);
   ce_low();
   nrf24_init();
-  HAL_FLASH_Unlock();
 
   nrf24_auto_ack_all(auto_ack);
   nrf24_en_ack_pld(enable);
@@ -170,7 +168,7 @@ int main(void)
   ce_high();
 
   HAL_Delay(5);
-  char* type = "Hello ST";
+  char* type = "Hello ST with NRF24";
   Message_t msg;
   memset(&msg, 0, sizeof(msg));
   msg.len = strlen(type);
@@ -184,7 +182,7 @@ int main(void)
   memset(&cmd, 0, sizeof(cmd));
   cmd.type = PACKET_COMMAND;
   cmd.direction = 2;
-  cmd.motor_pwm = 148;
+  cmd.motor_pwm = 37;
   cmd.motor_address = 3;
   cmd.main_motor_X = 45;
   transmit((Dummy_t*) &cmd);
