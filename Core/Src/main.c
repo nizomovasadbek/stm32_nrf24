@@ -81,22 +81,7 @@ void StartDefaultTask(void *argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-OTAFUS void dummy(void) {
-	asm volatile("nop");
-	asm volatile("nop");
-	asm volatile("nop");
-	asm volatile("nop");
-	asm volatile("nop");
-	asm volatile("nop");
-	asm volatile("nop");
-	asm volatile("nop");
-	asm volatile("nop");
-	HAL_Delay(1000);
-	HAL_GPIO_TogglePin(USER_LED_GPIO_Port, USER_LED_Pin);
-	HAL_Delay(1000);
-	HAL_GPIO_TogglePin(USER_LED_GPIO_Port, USER_LED_Pin);
-	return;
-}
+
 /* USER CODE END 0 */
 
 /**
