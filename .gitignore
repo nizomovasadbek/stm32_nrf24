@@ -4,6 +4,6 @@
 *.elf
 /Debug/
 /Release/
-/.settings/
+/.settings/*
 
 .DS_Store
