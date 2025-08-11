@@ -55,7 +55,6 @@ OTAFUS void flash_erase() {
 
 
 OTAFUS void flash_write(u32 addr, u8 data) {
-	flash_erase();
 	flash_unlock();
 
 	kFLASH.FLASH_CR &= ~(3 << PSIZE);
