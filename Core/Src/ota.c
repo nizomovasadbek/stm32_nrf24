@@ -29,8 +29,8 @@ OTAFUS void flash_unlock(void) {
 	while(kFLASH.FLASH_SR & (1 << FLASH_BUSY));
 
 	if(kFLASH.FLASH_CR & (1 << LOCK)) {
-		*((u32*) kFLASH.FLASHKEY) = F_KEY1;
-		*((u32*) kFLASH.FLASHKEY) = F_KEY2;
+		kFLASH.FLASHKEY = F_KEY1;
+		kFLASH.FLASHKEY = F_KEY2;
 	}
 }
 
@@ -53,7 +53,6 @@ OTAFUS void flash_erase() {
 
 
 OTAFUS void flash_write(u32 addr, u8 data) {
-	while(kFLASH.FLASH_SR & (1 << FLASH_BUSY));
 	flash_unlock();
 
 	kFLASH.FLASH_CR &= ~(3 << PSIZE);

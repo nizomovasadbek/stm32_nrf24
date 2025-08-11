@@ -11,14 +11,13 @@
 #include "type.h"
 
 typedef struct {
-	u16 FLASH_ACR;
-	u16 RESERVED0;
-	u32 FLASHKEY;
-	u32 FLASHOPTKEY;
-	u32 FLASH_SR;
-	u32 FLASH_CR;
-	u32 FLASH_OPTCR;
-} __attribute__((packed)) FLASH_t;
+	volatile u32 FLASH_ACR;
+	volatile u32 FLASHKEY;
+	volatile u32 FLASHOPTKEY;
+	volatile u32 FLASH_SR;
+	volatile u32 FLASH_CR;
+	volatile u32 FLASH_OPTCR;
+} FLASH_t;
 
 typedef struct {
 	u32 MODER;
@@ -34,7 +33,7 @@ typedef struct {
 	u32 LCKR;
 	u32 AFRL;
 	u32 AFRH;
-} __attribute__((packed)) GPIO_t;
+} GPIO_t;
 
 typedef struct {
 	u16 SPI_CR1;
@@ -55,7 +54,7 @@ typedef struct {
 	u16 RESERVED7;
 	u16 SPI_I2SPR;
 	u16 RESERVED8;
-} __attribute__((packed)) SPI_t;
+} SPI_t;
 
 #define kSPI1	(*(volatile SPI_t*) 0x40013000)
 #define kGPIOB	(*(volatile GPIO_t*) 0x40020400)
@@ -122,8 +121,8 @@ typedef struct {
 #define _390KHz			(7 << BR)
 
 
-#define F_KEY1		0x45670123
-#define F_KEY2		0xCDEF89AB
+#define F_KEY1		0x45670123U
+#define F_KEY2		0xCDEF89ABU
 
 // FLASH_ACR register
 #define LATENCY			0

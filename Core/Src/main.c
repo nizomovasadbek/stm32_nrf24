@@ -109,7 +109,7 @@ int main(void)
   /* USER CODE BEGIN 1 */
 //	ota_init();
 	copy_text();
-	flash_unlock();
+	flash_erase();
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
