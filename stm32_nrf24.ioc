@@ -2,8 +2,9 @@
 CAD.formats=
 CAD.pinconfig=
 CAD.provider=
-FREERTOS.IPParameters=Tasks01,configENABLE_FPU,configUSE_NEWLIB_REENTRANT
-FREERTOS.Tasks01=defaultTask,24,128,StartDefaultTask,Default,NULL,Dynamic,NULL,NULL
+FREERTOS.FootprintOK=true
+FREERTOS.IPParameters=Tasks01,configENABLE_FPU,configUSE_NEWLIB_REENTRANT,FootprintOK
+FREERTOS.Tasks01=defaultTask,24,128,StartDefaultTask,Default,NULL,Dynamic,NULL,NULL;SendDummy,22,128,send_dummy,Default,NULL,Dynamic,NULL,NULL
 FREERTOS.configENABLE_FPU=1
 FREERTOS.configUSE_NEWLIB_REENTRANT=1
 File.Version=6

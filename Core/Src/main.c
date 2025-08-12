@@ -63,6 +63,13 @@ const osThreadAttr_t defaultTask_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
+/* Definitions for SendDummy */
+osThreadId_t SendDummyHandle;
+const osThreadAttr_t SendDummy_attributes = {
+  .name = "SendDummy",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityBelowNormal6,
+};
 /* USER CODE BEGIN PV */
 extern uint32_t _ota_begin, _ota_end, _ota_loadaddr;
 /* USER CODE END PV */
@@ -74,6 +81,7 @@ static void MX_CRC_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USART1_UART_Init(void);
 void StartDefaultTask(void *argument);
+void send_dummy(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -153,21 +161,15 @@ int main(void)
   ce_high();
 
   HAL_Delay(5);
-  char* type = "Hello ST with NRF24";
-  Message_t msg;
-  memset(&msg, 0, sizeof(msg));
-  msg.len = strlen(type);
-  msg.status = STATUS_TEXT_EOL;
-  strcpy(msg.payload, type);
-  msg.type = PACKET_TEXT;
-  transmit((Dummy_t*) &msg);
+  transmit_text("This message is supposed to transmit by dividing into specific size of chunks");
+  transmit_text("Mojang!");
   HAL_Delay(1000);
 
   Command_t cmd;
   memset(&cmd, 0, sizeof(cmd));
   cmd.type = PACKET_COMMAND;
   cmd.direction = 2;
-  cmd.motor_pwm = 37;
+  cmd.motor_pwm = 137;
   cmd.motor_address = 3;
   cmd.main_motor_X = 45;
   transmit((Dummy_t*) &cmd);
@@ -204,6 +206,9 @@ int main(void)
   /* Create the thread(s) */
   /* creation of defaultTask */
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+
+  /* creation of SendDummy */
+  SendDummyHandle = osThreadNew(send_dummy, NULL, &SendDummy_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -461,9 +466,40 @@ void StartDefaultTask(void *argument)
   for(;;)
   {
 	  HAL_GPIO_TogglePin(USER_LED_GPIO_Port, USER_LED_Pin);
-    osDelay(300);
+	  osDelay(300);
   }
   /* USER CODE END 5 */
+}
+
+/* USER CODE BEGIN Header_send_dummy */
+/**
+* @brief Function implementing the SendDummy thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_send_dummy */
+void send_dummy(void *argument)
+{
+  /* USER CODE BEGIN send_dummy */
+  /* Infinite loop */
+	Command_t cmd;
+	memset(&cmd, 0, 32);
+	cmd.type = PACKET_COMMAND;
+	cmd.direction = 2;
+	cmd.motor_address = 2;
+	cmd.main_motor_X = 121;
+	cmd.main_motor_Y = 72;
+	uint8_t pwm = 0;
+	for(;;)
+	{
+	  cmd.motor_pwm = pwm;
+	  taskENTER_CRITICAL();
+	  transmit((Dummy_t*) &cmd);
+	  pwm++;
+	  taskEXIT_CRITICAL();
+	  osDelay(200);
+	}
+  /* USER CODE END send_dummy */
 }
 
 /**
