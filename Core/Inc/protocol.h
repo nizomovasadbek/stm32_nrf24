@@ -12,14 +12,25 @@
 #define PACKET_TEXT			2
 #define PACKET_PING			3
 
-#define PING_SEND			1
-#define PING_CONFIRMED		2
+#define FIRMWARE_UPLOADING	1
+#define FIRMWARE_EOL		2
+
+typedef struct {
+	uint8_t type;
+	uint8_t checksum;
+	uint8_t	mode;
+	uint8_t payload[16];
+	uint8_t reserved[13];
+} Firmware_t;
 
 typedef struct {
 	uint8_t type;
 	uint8_t checksum;
 	uint8_t reserved[30];
 } Dummy_t;
+
+#define PING_SEND			1
+#define PING_CONFIRMED		2
 
 typedef struct {
 	uint8_t type;

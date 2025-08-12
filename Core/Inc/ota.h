@@ -59,6 +59,7 @@ typedef struct {
 #define kSPI1	(*(volatile SPI_t*) 0x40013000)
 #define kGPIOB	(*(volatile GPIO_t*) 0x40020400)
 #define kFLASH	(*(volatile FLASH_t*) 0x40023C00)
+#define DBGMCUIDCODE	0xE0042000
 
 // SPI_CR1
 #define CPHA			0
