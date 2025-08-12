@@ -29,6 +29,7 @@
 #include "string.h"
 #include "transmitter.h"
 #include "ota.h"
+#include "logger.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -100,6 +101,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+	set_log_level(LEVEL_INFO);
 //	ota_init();
 	copy_text();
   /* USER CODE END 1 */
@@ -126,7 +128,7 @@ int main(void)
   MX_SPI1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-  printf("HELLO\r\n");
+  ilog(LEVEL_INFO, "Hello!");
 
   csn_high();
   HAL_Delay(5);

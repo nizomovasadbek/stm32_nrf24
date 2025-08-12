@@ -10,15 +10,37 @@
 #include "logger.h"
 #include "string.h"
 
-uint8_t CONFIG = 0x00;
+u8 LEVEL = 0;
 
-void logg(uint8_t level, const char* str) {
-	__attribute__((unused)) char s[10];
-	memset(s, 0, 10);
-
-	printf("\r\n");
+void set_log_level(u8 level) {
+	LEVEL = level;
 }
 
-void log_init(uint8_t level) {
-	CONFIG = level;
+void ilog(u8 level, const char* str) {
+	if(strlen(str) > STRING_BOUND) return;
+	if(!(level & LEVEL)) return;
+	char prefix[PREFIX_SIZE];
+	memset(prefix, 0, PREFIX_SIZE);
+	char* temp;
+
+	switch(level) {
+	case LEVEL_INFO:
+		temp = "[INFO] ";
+		break;
+	case LEVEL_WARN:
+		temp = "[WARNING] ";
+		break;
+	case LEVEL_ERROR:
+		temp = "[ERROR] ";
+		break;
+	case LEVEL_SEVERE:
+		temp = "[SEVERE] ";
+		break;
+	default:
+		temp = "[UNKNOWN] ";
+		break;
+	}
+
+	strncpy(prefix, temp, PREFIX_SIZE);
+	printf("%s %s\n", prefix, str);
 }

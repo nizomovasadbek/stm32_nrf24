@@ -8,14 +8,17 @@
 #ifndef INC_LOGGER_H_
 #define INC_LOGGER_H_
 
-#include "stdint.h"
+#include "type.h"
 
-#define LEVEL_INFO		0x00
-#define LEVEL_WARN		0x01
-#define LEVEL_ERROR		0x02
-#define LEVEL_SEVERE	0x04
+#define LEVEL_INFO		0x01
+#define LEVEL_WARN		0x02
+#define LEVEL_ERROR		0x04
+#define LEVEL_SEVERE	0x08
 
-void log_init(uint8_t);
-void logg(uint8_t, const char*);
+#define PREFIX_SIZE 	15
+#define STRING_BOUND	100
+
+void ilog(u8, const char*);
+void set_log_level(u8);
 
 #endif /* INC_LOGGER_H_ */
