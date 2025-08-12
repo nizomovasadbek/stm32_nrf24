@@ -173,7 +173,7 @@ typedef struct {
 OTAFUS void flash_unlock(void);
 OTAFUS void flash_lock(void);
 OTAFUS void flash_erase(void);
-OTAFUS void flash_write(u32 addr, u8 data);
+OTAFUS void flash_write(u32 addr, u16 data);
 OTAFUS void SPI1_transmit(u8 data);
 OTAFUS u8 SPI1_receive(void);
 extern void copy_text(void);

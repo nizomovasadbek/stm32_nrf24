@@ -54,12 +54,13 @@ OTAFUS void flash_erase() {
 	flash_lock();
 }
 
-OTAFUS void flash_write(u32 addr, u8 data) {
+OTAFUS void flash_write(u32 addr, u16 data) {
 	flash_unlock();
 
 	kFLASH.FLASH_CR &= ~(3 << PSIZE);
+	kFLASH.FLASH_CR |= (1 << PSIZE);
 	kFLASH.FLASH_CR |= (1 << PG);
-	*((u8*) addr) = data;
+	*((u16*) addr) = data;
 	kFLASH.FLASH_CR &= ~(1 << PG);
 
 	flash_lock();

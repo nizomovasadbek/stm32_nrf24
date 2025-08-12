@@ -17,8 +17,7 @@ typedef unsigned int u32;
 typedef signed long long i64;
 typedef unsigned long long u64;
 
-typedef boolean u8;
-typedef size_t	u64;
+typedef u8 boolean;
 
 #define true		1
 #define false		0
