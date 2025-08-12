@@ -112,6 +112,7 @@ typedef struct {
 #define ODD				8
 #define MCKOE			9
 
+//SPI speed
 #define _50MHz			(0 << BR)
 #define	_25MHz			(1 << BR)
 #define _12v5MHz		(2 << BR)
@@ -121,7 +122,7 @@ typedef struct {
 #define _781KHz			(6 << BR)
 #define _390KHz			(7 << BR)
 
-
+// Key sequence to unlock flash
 #define F_KEY1		0x45670123U
 #define F_KEY2		0xCDEF89ABU
 
@@ -168,6 +169,7 @@ typedef struct {
 
 #define OTAFUS	__attribute__((section(".ota_section")))
 #define FLASH_ADDRESS		0x08000000
+
 OTAFUS void flash_unlock(void);
 OTAFUS void flash_lock(void);
 OTAFUS void flash_erase(void);

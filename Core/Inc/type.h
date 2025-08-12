@@ -17,4 +17,11 @@ typedef unsigned int u32;
 typedef signed long long i64;
 typedef unsigned long long u64;
 
-#endif /* INC_TYPE_H_ */
+typedef boolean u8;
+typedef size_t	u64;
+
+#define true		1
+#define false		0
+#define null		(void*) 0
+
+#endif
