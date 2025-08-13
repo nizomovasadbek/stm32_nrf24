@@ -8,6 +8,8 @@
 
 #include "ota.h"
 
+extern u32 _estack;
+
 OTAFUS void SPI1_transmit(u8 data) {
 	while(!(kSPI1.SPI_SR & (1 << TXE)));
 
@@ -65,4 +67,7 @@ OTAFUS void flash_write(u32 addr, u16 data) {
 
 	flash_lock();
 	while(kFLASH.FLASH_SR & (1 << FLASH_BUSY));
+}
+
+OTAFUS void trigger_update() {
 }
