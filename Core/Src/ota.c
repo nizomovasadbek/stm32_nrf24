@@ -8,8 +8,6 @@
 
 #include "ota.h"
 
-extern u32 _estack;
-
 OTAFUS void SPI1_transmit(u8 data) {
 	while(!(kSPI1.SPI_SR & (1 << TXE)));
 
