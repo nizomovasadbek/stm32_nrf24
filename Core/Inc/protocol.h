@@ -37,7 +37,8 @@ typedef struct {
 typedef struct {
 	uint8_t type;
 	uint8_t checksum;
-	uint8_t reserved[30];
+	uint8_t ack;
+	uint8_t reserved[29];
 } __attribute__((packed)) Ping_t;
 
 typedef struct {

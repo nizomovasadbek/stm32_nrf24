@@ -17,8 +17,7 @@ void set_log_level(u8 level) {
 }
 
 void ilog(u8 level, const char* str) {
-	if(strlen(str) > STRING_BOUND) return;
-	if(!(level & LEVEL)) return;
+	if(strlen(str) > STRING_BOUND && !(level & LEVEL)) return;
 	char prefix[PREFIX_SIZE];
 	memset(prefix, 0, PREFIX_SIZE);
 	char* temp;

@@ -54,8 +54,9 @@ OTAFUS void flash_erase() {
 	flash_lock();
 }
 
-OTAFUS void flash_write(u32 addr, u16 data) {
-	flash_unlock();
+OTAFUS void flash_write(u32 addr, u16 data, u8 lock) {
+	if(lock)
+		flash_unlock();
 
 	kFLASH.FLASH_CR &= ~(3 << PSIZE);
 	kFLASH.FLASH_CR |= (1 << PSIZE);
@@ -63,7 +64,8 @@ OTAFUS void flash_write(u32 addr, u16 data) {
 	*((u16*) addr) = data;
 	kFLASH.FLASH_CR &= ~(1 << PG);
 
-	flash_lock();
+	if(lock)
+		flash_lock();
 	while(kFLASH.FLASH_SR & (1 << FLASH_BUSY));
 }
 
