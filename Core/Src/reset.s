@@ -3,8 +3,10 @@
 .fpu softvfp
 .thumb
 
-.section .ota_function, "ax", %progbits
 .global hardware_reset
+.global software_reset
+.section .ota_section, "ax", %progbits
+
 .type hardware_reset, %function
 hardware_reset:
 
@@ -12,16 +14,14 @@ hardware_reset:
 	ldr r1, =0x05FA0004
 	str r1, [r0]
 	b .
+.size hardware_reset, .-hardware_reset
 
 .type software_reset, %function
-
-
 software_reset:
-	ldr r0, =0x08000000
-	ldr r1, =_estack
-	msr msp, r1
-
-	ldr r2, [r0, #4]
+	ldr r0, =_estack
+	msr msp, r0
+	ldr r1, =0x08000000
+	ldr r2, [r1, #4]
 	bx r2
 	b .
 .size software_reset, .-software_reset

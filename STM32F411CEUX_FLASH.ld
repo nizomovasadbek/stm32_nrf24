@@ -169,6 +169,9 @@ SECTIONS
   	 . = ALIGN(4);
   	 _ota_begin = .;
   	 *(.ota_section)
+  	 *(.ota_section*)
+  	 KEEP(*(.ota_section))
+  	 KEEP(*(.ota_section*))
   	 _ota_end = .;
   	 . = ALIGN(4);
   } >RAM AT> FLASH

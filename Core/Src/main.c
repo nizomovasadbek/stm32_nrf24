@@ -130,7 +130,6 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   ilog(LEVEL_INFO, "Hello!");
-  hardware_reset();
 
   csn_high();
   HAL_Delay(5);

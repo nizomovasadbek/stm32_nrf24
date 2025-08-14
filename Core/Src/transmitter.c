@@ -13,12 +13,13 @@
 #include "stdint.h"
 #include "string.h"
 #include "stdio.h"
+#include "logger.h"
 
 void transmit(Dummy_t* packet) {
 	packet->checksum = 0;
 	packet->checksum = calculate_checksum(packet);
 	if(nrf24_transmit((uint8_t*) packet, 32)) {
-		printf("Transmission successful\r\n");
+		ilog(LEVEL_INFO, "Transmission successful!");
 	}
 }
 

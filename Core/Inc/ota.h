@@ -168,9 +168,6 @@ typedef struct {
 #define SPRMOD			31
 
 #define OTAFUS	__attribute__((section(".ota_section")))
-#define FLASH_ADDRESS		0x08000000
-
-typedef void (*func)(void);
 
 OTAFUS void flash_unlock(void);
 OTAFUS void flash_lock(void);
@@ -179,8 +176,12 @@ OTAFUS void flash_write(u32 addr, u16 data, u8 lock);
 OTAFUS void SPI1_transmit(u8 data);
 OTAFUS u8 SPI1_receive(void);
 OTAFUS void trigger_update(void);
+
 OTAFUS extern void hardware_reset(void);
-OTAFUS extern void software_reset(void);
+OTAFUS extern void software_reset(void); //deprecated
+OTAFUS extern void disable_interrupt(void);
+OTAFUS extern void enable_interrupt(void);
+
 extern void copy_text(void);
 
 #endif /* INC_OTA_H_ */
