@@ -179,8 +179,8 @@ OTAFUS void flash_write(u32 addr, u16 data, u8 lock);
 OTAFUS void SPI1_transmit(u8 data);
 OTAFUS u8 SPI1_receive(void);
 OTAFUS void trigger_update(void);
-OTAFUS extern void software_reset(void);
 OTAFUS extern void hardware_reset(void);
+OTAFUS extern void software_reset(void);
 extern void copy_text(void);
 
 #endif /* INC_OTA_H_ */

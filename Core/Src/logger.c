@@ -41,5 +41,5 @@ void ilog(u8 level, const char* str) {
 	}
 
 	strncpy(prefix, temp, PREFIX_SIZE);
-	printf("%s %s\n", prefix, str);
+	printf("%s %s\r\n", prefix, str);
 }

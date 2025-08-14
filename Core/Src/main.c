@@ -101,7 +101,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	set_log_level(LEVEL_INFO);
+	set_log_level(LEVEL_INFO | LEVEL_ERROR);
 //	ota_init();
 	copy_text();
   /* USER CODE END 1 */
@@ -128,7 +128,9 @@ int main(void)
   MX_SPI1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+
   ilog(LEVEL_INFO, "Hello!");
+  hardware_reset();
 
   csn_high();
   HAL_Delay(5);

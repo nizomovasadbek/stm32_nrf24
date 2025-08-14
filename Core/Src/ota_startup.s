@@ -25,3 +25,5 @@ copy_text_loop:
 
 	pop {r0, r1, r2, r3}
 	bx lr
+
+.size copy_text, .-copy_text
