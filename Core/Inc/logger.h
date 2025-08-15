@@ -18,7 +18,8 @@
 #define PREFIX_SIZE 	15
 #define STRING_BOUND	100
 
-void ilog(u8, const char*);
+void ilog(u8, const char*, ...);
 void set_log_level(u8);
+void testfunc(char* st, ...);
 
 #endif /* INC_LOGGER_H_ */

@@ -101,7 +101,9 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+	char* x = "nskjfdnskdfnskjndfkjsnhfjksdhnfkjdsnf";
 	set_log_level(LEVEL_INFO | LEVEL_ERROR);
+	testfunc(x, 0x12, 0x23, 0x34, 0x45, 0x56, 0x67, 0x78, 0x89, 0x90, 0x9F);
 //	ota_init();
 	copy_text();
   /* USER CODE END 1 */
