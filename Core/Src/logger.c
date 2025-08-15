@@ -13,7 +13,7 @@
 u8 LEVEL = 0;
 
 void testfunc(char* st, ...) {
-	void* argp = (void*) ((&st)+4);
+	__attribute__((unused)) void* argp = (void*) ((&st)+4);
 
 	return;
 }
