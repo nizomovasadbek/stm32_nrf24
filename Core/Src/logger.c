@@ -23,7 +23,11 @@ void set_log_level(u8 level) {
 }
 
 void ilog(u8 level, const char* str, ...) {
-	if(strlen(str) > STRING_BOUND && !(level & LEVEL)) return;
+	u32 len = strlen(str);
+	if(len > STRING_BOUND && !(level & LEVEL)) return;
+	u32 ptr = 0;
+	char buffer[len];
+	memset(buffer, 0, len);
 
 	void* argp = (void*) &level;
 	argp += 2;
@@ -50,10 +54,27 @@ void ilog(u8 level, const char* str, ...) {
 		break;
 	}
 
+	u8 skip = 0;
 	while(*str) {
-		if(*str == '%') {
-			// TODO: printf logikasi
+		switch(*str) {
+		case '%':
+			buffer[ptr] = '%';
+			break;
+		case 'c':
+			buffer[ptr] = *((char*) argp);
+			argp++;
+			skip = 1;
+			break;
+		case 's':
+			memcpy(buffer, (char*) argp, skip = strlen((char*) argp));
+			ptr += skip - 1;
+			skip = 1;
+			break;
 		}
+
+		ptr++;
+		str += 1 + skip;
+		skip = 0;
 	}
 	//TODO: string bufer har safar syscall chaqirmaslik uchun (long latency)
 
