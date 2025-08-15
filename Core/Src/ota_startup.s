@@ -4,7 +4,7 @@
 .thumb
 
 .global copy_text
-.section .text
+.section .text, "ax", %progbits
 
 copy_text:
 
