@@ -101,9 +101,9 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	char* x = "nskjfdnskdfnskjndfkjsnhfjksdhnfkjdsnf";
+	char* x = "dskfmldkfd";
 	set_log_level(LEVEL_INFO | LEVEL_ERROR);
-	testfunc(x, 0x12, 0x23, 0x34, 0x45, 0x56, 0x67, 0x78, 0x89, 0x90, 0x9F);
+	testfunc(x, 0x12, 0x23, 'h', 0x45, 0xFE);
 //	ota_init();
 	copy_text();
   /* USER CODE END 1 */
@@ -131,12 +131,12 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  ilog(LEVEL_INFO, "Hello!");
-
   csn_high();
   HAL_Delay(5);
   ce_low();
   nrf24_init();
+  ilog(LEVEL_INFO, "HI %c", 0x68);
+  printf("Hello\r\n");
 
   nrf24_auto_ack_all(auto_ack);
   nrf24_en_ack_pld(enable);

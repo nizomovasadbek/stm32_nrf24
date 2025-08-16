@@ -13,7 +13,7 @@
 u8 LEVEL = 0;
 
 void testfunc(char* st, ...) {
-	__attribute__((unused)) void* argp = (void*) ((&st)+4);
+	__attribute__((unused)) void* argp = (void*) ((&st));
 
 	return;
 }
@@ -29,8 +29,8 @@ void ilog(u8 level, const char* str, ...) {
 	char buffer[len];
 	memset(buffer, 0, len);
 
-	void* argp = (void*) &level;
-	argp += 2;
+	void* argp = (void*) &str;
+	argp += 4;
 
 	char prefix[PREFIX_SIZE];
 	memset(prefix, 0, PREFIX_SIZE);
@@ -56,9 +56,11 @@ void ilog(u8 level, const char* str, ...) {
 
 	u8 skip = 0;
 	while(*str) {
-		switch(*str) {
+		if(*str == '%')
+		switch(*(str+1)) {
 		case '%':
 			buffer[ptr] = '%';
+			skip = 1;
 			break;
 		case 'c':
 			buffer[ptr] = *((char*) argp);
@@ -70,6 +72,8 @@ void ilog(u8 level, const char* str, ...) {
 			ptr += skip - 1;
 			skip = 1;
 			break;
+		} else {
+			buffer[ptr] = *str;
 		}
 
 		ptr++;
@@ -79,5 +83,5 @@ void ilog(u8 level, const char* str, ...) {
 	//TODO: string bufer har safar syscall chaqirmaslik uchun (long latency)
 
 	strncpy(prefix, temp, PREFIX_SIZE);
-	printf("%s %s\r\n", prefix, str);
+	printf("%s %s\r\n", prefix, buffer);
 }
