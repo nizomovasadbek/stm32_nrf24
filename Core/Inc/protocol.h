@@ -8,6 +8,8 @@
 #ifndef INC_PROTOCOL_H_
 #define INC_PROTOCOL_H_
 
+#include "stdint.h"
+
 #define PACKET_COMMAND		1
 #define PACKET_TEXT			2
 #define PACKET_PING			3

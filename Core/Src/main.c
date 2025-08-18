@@ -30,6 +30,8 @@
 #include "transmitter.h"
 #include "ota.h"
 #include "logger.h"
+#include "tasks/blinkled.h"
+#include "tasks/txdummy.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -466,12 +468,7 @@ void ota_init(void) {
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
-  /* Infinite loop */
-  for(;;)
-  {
-	  HAL_GPIO_TogglePin( USER_LED_GPIO_Port, USER_LED_Pin );
-	  osDelay(300);
-  }
+	blink_led();
   /* USER CODE END 5 */
 }
 
@@ -486,23 +483,7 @@ void send_dummy(void *argument)
 {
   /* USER CODE BEGIN send_dummy */
   /* Infinite loop */
-	Command_t cmd;
-	memset( &cmd, 0, 32 );
-	cmd.type = PACKET_COMMAND;
-	cmd.direction = 2;
-	cmd.motor_address = 2;
-	cmd.main_motor_X = 121;
-	cmd.main_motor_Y = 72;
-	uint8_t pwm = 0;
-	for(;;)
-	{
-	  cmd.motor_pwm = pwm;
-	  taskENTER_CRITICAL();
-	  transmit( ( Dummy_t* ) &cmd );
-	  pwm++;
-	  taskEXIT_CRITICAL();
-	  osDelay( 200 );
-	}
+	transmit_dummy();
   /* USER CODE END send_dummy */
 }
 
