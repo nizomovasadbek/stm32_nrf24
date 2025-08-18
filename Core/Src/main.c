@@ -177,13 +177,13 @@ int main(void)
   cmd.motor_pwm = 137;
   cmd.motor_address = 3;
   cmd.main_motor_X = 45;
-  transmit( (Dummy_t*) &cmd );
+  transmit( ( Dummy_t* ) &cmd );
   HAL_Delay( 1000 );
 
   Ping_t p;
   memset( &p, 0, 32 );
   p.type = PACKET_PING;
-  transmit( (Dummy_t*) &p );
+  transmit( ( Dummy_t* ) &p );
 
   KERNEL_MODE = KERNEL_RTOS;
   /* USER CODE END 2 */

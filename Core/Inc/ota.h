@@ -56,9 +56,9 @@ typedef struct {
 	u16 RESERVED8;
 } SPI_t;
 
-#define kSPI1	(*(volatile SPI_t*) 0x40013000)
-#define kGPIOB	(*(volatile GPIO_t*) 0x40020400)
-#define kFLASH	(*(volatile FLASH_t*) 0x40023C00)
+#define kSPI1	(  *(  volatile SPI_t*  ) 0x40013000  )
+#define kGPIOB	(  *(  volatile GPIO_t*  ) 0x40020400  )
+#define kFLASH	(  *(  volatile FLASH_t*  ) 0x40023C00  )
 #define DBGMCUIDCODE	0xE0042000
 
 // SPI_CR1
@@ -112,14 +112,14 @@ typedef struct {
 #define ODD				8
 #define MCKOE			9
 
-#define _50MHz			(0 << BR)
-#define	_25MHz			(1 << BR)
-#define _12v5MHz		(2 << BR)
-#define _6v25MHz		(3 << BR)
-#define _3v125MHz		(4 << BR)
-#define _1v56MHz		(5 << BR)
-#define _781KHz			(6 << BR)
-#define _390KHz			(7 << BR)
+#define _50MHz			(  0 << BR  )
+#define	_25MHz			(  1 << BR  )
+#define _12v5MHz		(  2 << BR  )
+#define _6v25MHz		(  3 << BR  )
+#define _3v125MHz		(  4 << BR  )
+#define _1v56MHz		(  5 << BR  )
+#define _781KHz			(  6 << BR  )
+#define _390KHz			(  7 << BR  )
 
 #define F_KEY1		0x45670123U
 #define F_KEY2		0xCDEF89ABU
@@ -167,19 +167,19 @@ typedef struct {
 
 #define OTAFUS	__attribute__((section(".ota_section")))
 
-OTAFUS void flash_unlock(void);
-OTAFUS void flash_lock(void);
-OTAFUS void flash_erase(void);
-OTAFUS void flash_write(u32 addr, u16 data, u8 lock);
-OTAFUS void SPI1_transmit(u8 data);
-OTAFUS u8 SPI1_receive(void);
-OTAFUS void trigger_update(void);
+OTAFUS void flash_unlock(  void  );
+OTAFUS void flash_lock(  void  );
+OTAFUS void flash_erase(  void  );
+OTAFUS void flash_write(  u32 addr, u16 data, u8 lock  );
+OTAFUS void SPI1_transmit(  u8 data  );
+OTAFUS u8 SPI1_receive(  void  );
+OTAFUS void trigger_update(  void  );
 
-OTAFUS extern void hardware_reset(void);
-OTAFUS extern void software_reset(void); //deprecated
-OTAFUS extern void disable_interrupt(void);
-OTAFUS extern void enable_interrupt(void);
+OTAFUS extern void hardware_reset(  void  );
+OTAFUS extern void software_reset(  void  ); //deprecated
+OTAFUS extern void disable_interrupt(  void  );
+OTAFUS extern void enable_interrupt(  void  );
 
-extern void copy_text(void);
+extern void copy_text(  void  );
 
 #endif
