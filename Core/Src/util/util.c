@@ -5,7 +5,7 @@
  *      Author: Asato
  */
 
-#include "util.h"
+#include "util/util.h"
 
 OTAFUS uint8_t calculate_checksum( Dummy_t* packet ) {
 	packet->checksum = 0;

@@ -24,7 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include <string.h>
 #include "NRF24.h"
-#include "util.h"
+#include "util/util.h"
 #include "stdio.h"
 #include "string.h"
 #include "transmitter.h"
@@ -32,6 +32,7 @@
 #include "logger.h"
 #include "tasks/blinkled.h"
 #include "tasks/txdummy.h"
+#include "stddef.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -73,8 +74,21 @@ const osThreadAttr_t SendDummy_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityBelowNormal6,
 };
+/* Definitions for nrf24_receive */
+osThreadId_t nrf24_receiveHandle;
+const osThreadAttr_t nrf24_receive_attributes = {
+  .name = "nrf24_receive",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityRealtime7,
+};
+/* Definitions for change_permit */
+osMessageQueueId_t change_permitHandle;
+const osMessageQueueAttr_t change_permit_attributes = {
+  .name = "change_permit"
+};
 /* USER CODE BEGIN PV */
 extern uint32_t _ota_begin, _ota_end, _ota_loadaddr;
+extern Dummy_t rxdata;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -85,6 +99,7 @@ static void MX_SPI1_Init(void);
 static void MX_USART1_UART_Init(void);
 void StartDefaultTask(void *argument);
 void send_dummy(void *argument);
+void receive_poll(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -201,6 +216,10 @@ int main(void)
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
 
+  /* Create the queue(s) */
+  /* creation of change_permit */
+  change_permitHandle = osMessageQueueNew (16, sizeof(uint16_t), &change_permit_attributes);
+
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
@@ -211,6 +230,9 @@ int main(void)
 
   /* creation of SendDummy */
   SendDummyHandle = osThreadNew(send_dummy, NULL, &SendDummy_attributes);
+
+  /* creation of nrf24_receive */
+  nrf24_receiveHandle = osThreadNew(receive_poll, NULL, &nrf24_receive_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -481,6 +503,21 @@ void send_dummy(void *argument)
   /* Infinite loop */
 	transmit_dummy();
   /* USER CODE END send_dummy */
+}
+
+/* USER CODE BEGIN Header_receive_poll */
+/**
+* @brief Function implementing the myTask03 thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_receive_poll */
+void receive_poll(void *argument)
+{
+  /* USER CODE BEGIN receive_poll */
+	vTaskSuspend(  NULL  );
+	rx_poll(  rxdata  );
+  /* USER CODE END receive_poll */
 }
 
 /**

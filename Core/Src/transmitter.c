@@ -7,7 +7,7 @@
 
 
 #include "transmitter.h"
-#include "util.h"
+#include "util/util.h"
 #include "NRF24.h"
 
 #include "stdint.h"
