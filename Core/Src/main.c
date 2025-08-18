@@ -103,9 +103,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	string x = "dskfmldkfd";
-	set_log_level( LEVEL_INFO | LEVEL_ERROR );
-	testfunc( x, 0x12, 0x23, 'h', 0x45, 0xFE );
+	set_log_level(  LEVEL_INFO | LEVEL_ERROR  );
 //	ota_init();
 	copy_text();
   /* USER CODE END 1 */
@@ -137,8 +135,6 @@ int main(void)
   HAL_Delay( 5 );
   ce_low();
   nrf24_init();
-  ilog( LEVEL_INFO, "HI %c", 0x68 );
-  printf( "Hello\r\n" );
 
   nrf24_auto_ack_all( auto_ack );
   nrf24_en_ack_pld( enable );

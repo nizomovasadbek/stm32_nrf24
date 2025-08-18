@@ -19,7 +19,7 @@ void transmit(  Dummy_t* packet  ) {
 	packet->checksum = 0;
 	packet->checksum = calculate_checksum(  packet  );
 	if(  nrf24_transmit(  (  uint8_t*  ) packet, 32  )  ) {
-		ilog(  LEVEL_INFO, "Transmission successful!"  );
+		printf(  "Transmission successful!\r\n"  );
 	}
 }
 
