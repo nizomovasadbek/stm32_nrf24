@@ -17,6 +17,16 @@ typedef unsigned int u32;
 typedef signed long long i64;
 typedef unsigned long long u64;
 
+typedef i8*	i8ptr_t;
+typedef u8* u8ptr_t;
+typedef i16* i16ptr_t;
+typedef u16* u16ptr_t;
+typedef i32* i32ptr_t;
+typedef u32* u32ptr_t;
+typedef i64* i64ptr_t;
+typedef u64* u64ptr_t;
+typedef char* string;
+
 typedef u8 boolean;
 
 #define true		1

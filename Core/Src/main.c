@@ -101,7 +101,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	char* x = "dskfmldkfd";
+	string x = "dskfmldkfd";
 	set_log_level( LEVEL_INFO | LEVEL_ERROR );
 	testfunc( x, 0x12, 0x23, 'h', 0x45, 0xFE );
 //	ota_init();
@@ -132,7 +132,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   csn_high();
-  HAL_Delay(5);
+  HAL_Delay( 5 );
   ce_low();
   nrf24_init();
   ilog( LEVEL_INFO, "HI %c", 0x68 );
