@@ -8,6 +8,7 @@
 #ifndef INC_TASKS_RECEIVE_POLL_H_
 #define INC_TASKS_RECEIVE_POLL_H_
 
+#include "protocol.h"
 
 void rx_poll(  Dummy_t* data  );
 

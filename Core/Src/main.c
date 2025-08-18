@@ -24,14 +24,19 @@
 /* USER CODE BEGIN Includes */
 #include <string.h>
 #include "NRF24.h"
+
 #include "util/util.h"
+
 #include "stdio.h"
 #include "string.h"
 #include "transmitter.h"
 #include "ota.h"
 #include "logger.h"
+
 #include "tasks/blinkled.h"
 #include "tasks/txdummy.h"
+#include "tasks/receive_poll.h"
+
 #include "stddef.h"
 /* USER CODE END Includes */
 
@@ -81,14 +86,26 @@ const osThreadAttr_t nrf24_receive_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityRealtime7,
 };
+/* Definitions for pingSend */
+osThreadId_t pingSendHandle;
+const osThreadAttr_t pingSend_attributes = {
+  .name = "pingSend",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* Definitions for change_permit */
 osMessageQueueId_t change_permitHandle;
 const osMessageQueueAttr_t change_permit_attributes = {
   .name = "change_permit"
 };
+/* Definitions for dataMutex */
+osMutexId_t dataMutexHandle;
+const osMutexAttr_t dataMutex_attributes = {
+  .name = "dataMutex"
+};
 /* USER CODE BEGIN PV */
 extern uint32_t _ota_begin, _ota_end, _ota_loadaddr;
-extern Dummy_t rxdata;
+Dummy_t rxdata;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -100,6 +117,7 @@ static void MX_USART1_UART_Init(void);
 void StartDefaultTask(void *argument);
 void send_dummy(void *argument);
 void receive_poll(void *argument);
+void ping_send(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -203,6 +221,9 @@ int main(void)
 
   /* Init scheduler */
   osKernelInitialize();
+  /* Create the mutex(es) */
+  /* creation of dataMutex */
+  dataMutexHandle = osMutexNew(&dataMutex_attributes);
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
@@ -234,6 +255,9 @@ int main(void)
   /* creation of nrf24_receive */
   nrf24_receiveHandle = osThreadNew(receive_poll, NULL, &nrf24_receive_attributes);
 
+  /* creation of pingSend */
+  pingSendHandle = osThreadNew(ping_send, NULL, &pingSend_attributes);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -249,7 +273,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
+  while (  1  )
   {
     /* USER CODE END WHILE */
 
@@ -516,8 +540,26 @@ void receive_poll(void *argument)
 {
   /* USER CODE BEGIN receive_poll */
 	vTaskSuspend(  NULL  );
-	rx_poll(  rxdata  );
+	rx_poll(  (  Dummy_t*  )  &rxdata  );
   /* USER CODE END receive_poll */
+}
+
+/* USER CODE BEGIN Header_ping_send */
+/**
+* @brief Function implementing the pingSend thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_ping_send */
+void ping_send(void *argument)
+{
+  /* USER CODE BEGIN ping_send */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END ping_send */
 }
 
 /**
