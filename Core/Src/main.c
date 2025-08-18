@@ -36,6 +36,7 @@
 #include "tasks/blinkled.h"
 #include "tasks/txdummy.h"
 #include "tasks/receive_poll.h"
+#include "tasks/ping.h"
 
 #include "stddef.h"
 /* USER CODE END Includes */
@@ -554,11 +555,7 @@ void receive_poll(void *argument)
 void ping_send(void *argument)
 {
   /* USER CODE BEGIN ping_send */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
+  transmit_ping();
   /* USER CODE END ping_send */
 }
 

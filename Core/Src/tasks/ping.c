@@ -17,8 +17,8 @@ void transmit_ping(  void  ) {
 	Ping_t p;
 	memset(  &p, 0, 32  );
 
-	p.ack = PING_SEND;
-	p.type = PACKET_PING;
+	p.ack  =  PING_SEND;
+	p.type  =  PACKET_PING;
 
 	while(  1  ) {
 
