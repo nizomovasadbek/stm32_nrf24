@@ -102,8 +102,8 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
 	char* x = "dskfmldkfd";
-	set_log_level(LEVEL_INFO | LEVEL_ERROR);
-	testfunc(x, 0x12, 0x23, 'h', 0x45, 0xFE);
+	set_log_level( LEVEL_INFO | LEVEL_ERROR );
+	testfunc( x, 0x12, 0x23, 'h', 0x45, 0xFE );
 //	ota_init();
 	copy_text();
   /* USER CODE END 1 */
@@ -135,57 +135,56 @@ int main(void)
   HAL_Delay(5);
   ce_low();
   nrf24_init();
-  ilog(LEVEL_INFO, "HI %c", 0x68);
-  printf("Hello\r\n");
+  ilog( LEVEL_INFO, "HI %c", 0x68 );
+  printf( "Hello\r\n" );
 
-  nrf24_auto_ack_all(auto_ack);
-  nrf24_en_ack_pld(enable);
-  nrf24_en_dyn_ack(enable);
-  nrf24_dpl(disable);
+  nrf24_auto_ack_all( auto_ack );
+  nrf24_en_ack_pld( enable );
+  nrf24_en_dyn_ack( enable );
+  nrf24_dpl( disable );
 
-  nrf24_set_crc(no_crc, _1byte);
+  nrf24_set_crc( no_crc, _1byte );
 
-  nrf24_tx_pwr(n18dbm);
-  nrf24_data_rate(_250kbps);
-  nrf24_set_channel(CHANNEL);
-  nrf24_set_addr_width(5);
+  nrf24_tx_pwr( n18dbm );
+  nrf24_data_rate( _250kbps );
+  nrf24_set_channel( CHANNEL );
+  nrf24_set_addr_width( 5 );
 
-  nrf24_set_rx_dpl(0, disable);
-  nrf24_set_rx_dpl(1, disable);
-  nrf24_set_rx_dpl(2, disable);
-  nrf24_set_rx_dpl(3, disable);
-  nrf24_set_rx_dpl(4, disable);
-  nrf24_set_rx_dpl(5, disable);
+  nrf24_set_rx_dpl( 0, disable );
+  nrf24_set_rx_dpl( 1, disable );
+  nrf24_set_rx_dpl( 2, disable );
+  nrf24_set_rx_dpl( 3, disable );
+  nrf24_set_rx_dpl( 4, disable );
+  nrf24_set_rx_dpl( 5, disable );
 
-  nrf24_pipe_pld_size(0, 32);
+  nrf24_pipe_pld_size( 0, 32 );
 
-  nrf24_open_tx_pipe(address);
-  nrf24_open_rx_pipe(0, address);
+  nrf24_open_tx_pipe( address );
+  nrf24_open_rx_pipe( 0, address );
   nrf24_stop_listen();
 
   ce_high();
 
-  HAL_Delay(5);
-  transmit_text("This message is supposed to transmit by dividing into specific size of chunks");
-  transmit_text("Mojang!");
-  HAL_Delay(1000);
+  HAL_Delay( 5 );
+  transmit_text( "This message is supposed to transmit by dividing into specific size of chunks" );
+  transmit_text( "Mojang!" );
+  HAL_Delay( 1000 );
 
   Command_t cmd;
-  memset(&cmd, 0, sizeof(cmd));
+  memset( &cmd, 0, sizeof( cmd ) );
   cmd.type = PACKET_COMMAND;
   cmd.direction = 2;
   cmd.motor_pwm = 137;
   cmd.motor_address = 3;
   cmd.main_motor_X = 45;
-  transmit((Dummy_t*) &cmd);
-  HAL_Delay(1000);
+  transmit( (Dummy_t*) &cmd );
+  HAL_Delay( 1000 );
 
   Ping_t p;
-  memset(&p, 0, 32);
+  memset( &p, 0, 32 );
   p.type = PACKET_PING;
-  transmit((Dummy_t*) &p);
+  transmit( (Dummy_t*) &p );
 
-  HAL_Delay(1000);
   KERNEL_MODE = KERNEL_RTOS;
   /* USER CODE END 2 */
 
@@ -470,7 +469,7 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  HAL_GPIO_TogglePin(USER_LED_GPIO_Port, USER_LED_Pin);
+	  HAL_GPIO_TogglePin( USER_LED_GPIO_Port, USER_LED_Pin );
 	  osDelay(300);
   }
   /* USER CODE END 5 */
@@ -488,7 +487,7 @@ void send_dummy(void *argument)
   /* USER CODE BEGIN send_dummy */
   /* Infinite loop */
 	Command_t cmd;
-	memset(&cmd, 0, 32);
+	memset( &cmd, 0, 32 );
 	cmd.type = PACKET_COMMAND;
 	cmd.direction = 2;
 	cmd.motor_address = 2;
@@ -499,10 +498,10 @@ void send_dummy(void *argument)
 	{
 	  cmd.motor_pwm = pwm;
 	  taskENTER_CRITICAL();
-	  transmit((Dummy_t*) &cmd);
+	  transmit( ( Dummy_t* ) &cmd );
 	  pwm++;
 	  taskEXIT_CRITICAL();
-	  osDelay(200);
+	  osDelay( 200 );
 	}
   /* USER CODE END send_dummy */
 }

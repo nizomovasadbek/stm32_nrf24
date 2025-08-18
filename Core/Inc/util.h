@@ -16,7 +16,7 @@
 #define VALIDATE_FAIL		0
 #define VALIDATE_OK			1
 
-OTAFUS uint8_t calculate_checksum(Dummy_t* packet);
-OTAFUS uint8_t validate_checksum(Dummy_t* packet);
+OTAFUS uint8_t calculate_checksum( Dummy_t* packet );
+OTAFUS uint8_t validate_checksum( Dummy_t* packet );
 
 #endif /* INC_UTIL_H_ */

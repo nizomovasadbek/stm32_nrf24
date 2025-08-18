@@ -11,7 +11,7 @@
 #include "stdint.h"
 #include "protocol.h"
 
-void transmit(Dummy_t*);
-void transmit_text(const char* str);
+void transmit( Dummy_t* );
+void transmit_text( const char* str );
 
 #endif /* INC_TRANSMITTER_H_ */

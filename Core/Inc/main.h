@@ -53,7 +53,7 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-void ota_init(void);
+void ota_init( void );
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
