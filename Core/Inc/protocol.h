@@ -39,15 +39,11 @@ typedef struct {
 
 } __attribute__((packed)) Dummy_t;
 
-#define PING_SEND			1
-#define PING_CONFIRMED		2
-
 typedef struct {
 
 	uint8_t type;
 	uint8_t checksum;
-	uint8_t ack;
-	uint8_t reserved[29];
+	uint8_t reserved[30];
 
 } __attribute__((packed)) Ping_t;
 

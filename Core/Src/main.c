@@ -37,6 +37,7 @@
 #include "tasks/txdummy.h"
 #include "tasks/receive_poll.h"
 #include "tasks/ping.h"
+#include "tasks/stick_read.h"
 
 #include "stddef.h"
 /* USER CODE END Includes */
@@ -62,6 +63,8 @@ uint8_t address[5] = { 0, 0, 0, 0, 1 };
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
+
 CRC_HandleTypeDef hcrc;
 
 SPI_HandleTypeDef hspi1;
@@ -96,6 +99,13 @@ const osThreadAttr_t pingSend_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for StickRead */
+osThreadId_t StickReadHandle;
+const osThreadAttr_t StickRead_attributes = {
+  .name = "StickRead",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* Definitions for change_permit */
 osMessageQueueId_t change_permitHandle;
 const osMessageQueueAttr_t change_permit_attributes = {
@@ -117,10 +127,12 @@ static void MX_GPIO_Init(void);
 static void MX_CRC_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USART1_UART_Init(void);
+static void MX_ADC1_Init(void);
 void StartDefaultTask(void *argument);
 void send_dummy(void *argument);
 void receive_poll(void *argument);
 void ping_send(void *argument);
+void stick_read(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -165,6 +177,7 @@ int main(void)
   MX_CRC_Init();
   MX_SPI1_Init();
   MX_USART1_UART_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
 
   csn_high();
@@ -200,8 +213,7 @@ int main(void)
   ce_high();
 
   HAL_Delay( 5 );
-  transmit_text( "This message is supposed to transmit by dividing into specific size of chunks" );
-  transmit_text( "Mojang!" );
+  transmit_text(  "BLA BLA BLA BLA BLA BLA BLA BLA BLA BLA BLA BLA BLA BLA BLA"  );
   HAL_Delay( 1000 );
 
   Command_t cmd;
@@ -260,6 +272,9 @@ int main(void)
 
   /* creation of pingSend */
   pingSendHandle = osThreadNew(ping_send, NULL, &pingSend_attributes);
+
+  /* creation of StickRead */
+  StickReadHandle = osThreadNew(stick_read, NULL, &StickRead_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -328,6 +343,58 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+
+  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV6;
+  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc1.Init.ScanConvMode = ENABLE;
+  hadc1.Init.ContinuousConvMode = DISABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_8;
+  sConfig.Rank = 1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
+
 }
 
 /**
@@ -588,9 +655,24 @@ void receive_poll(void *argument)
 void ping_send(void *argument)
 {
   /* USER CODE BEGIN ping_send */
-	vTaskSuspend(  NULL  );
+//	vTaskSuspend(  NULL  );
   transmit_ping();
   /* USER CODE END ping_send */
+}
+
+/* USER CODE BEGIN Header_stick_read */
+/**
+* @brief Function implementing the StickRead thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_stick_read */
+void stick_read(void *argument)
+{
+  /* USER CODE BEGIN stick_read */
+	vTaskSuspend(  NULL  );
+  stick_adc_read();
+  /* USER CODE END stick_read */
 }
 
 /**

@@ -12,7 +12,7 @@ void blink_led(  void  ) {
 
 	while(  1  ) {
 		HAL_GPIO_TogglePin(  USER_LED_GPIO_Port, USER_LED_Pin  );
-		osDelay(  1000  );
+		osDelay(  300  );
 	}
 
 }

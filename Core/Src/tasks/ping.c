@@ -12,14 +12,14 @@
 #include "transmitter.h"
 #include "cmsis_os.h"
 #include "string.h"
+#include "ota.h"
+#include "stdio.h"
 
 void transmit_ping(  void  ) {
 
 	Ping_t p;
 	memset(  &p, 0, 32  );
-
-	p.ack  =  PING_SEND;
-	p.type  =  PACKET_PING;
+	p.type = PACKET_PING;
 
 	while(  1  ) {
 
@@ -29,7 +29,7 @@ void transmit_ping(  void  ) {
 
 		taskEXIT_CRITICAL();
 
-		osDelay(  100  );
+		osDelay(  250  );
 
 	}
 

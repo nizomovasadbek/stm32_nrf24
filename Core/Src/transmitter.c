@@ -20,11 +20,13 @@ void transmit(  Dummy_t* packet  ) {
 	packet->checksum = 0;
 	packet->checksum = calculate_checksum(  packet  );
 
-	if(  nrf24_transmit(  (  uint8_t*  ) packet, 32  )  ) {
+//	while (  !nrf24_transmit(  (  uint8_t*  ) packet, 32  )  ) {
+//
+//		printf(  "Transmission successful!\r\n"  );
+//
+//	}
 
-		printf(  "Transmission successful!\r\n"  );
-
-	}
+	nrf24_transmit_no_ack(  (  uint8_t*  ) packet, 32  );
 
 
 }

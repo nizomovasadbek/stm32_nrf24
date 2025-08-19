@@ -464,7 +464,7 @@ uint8_t nrf24_transmit( uint8_t *data, uint8_t size ){
 	ce_high(  );
 	if( KERNEL_MODE == KERNEL_HAL ) {
 		HAL_Delay( HOLD_TIME );
-	} else if( KERNEL_MODE == KERNEL_RTOS ) {
+	} else  {
 		osDelay( HOLD_TIME );
 	}
 	ce_low(  );
