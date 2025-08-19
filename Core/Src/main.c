@@ -511,7 +511,7 @@ u32 btn1_tick = 0;
 
 void HAL_GPIO_EXTI_Callback(  uint16_t GPIO_Pin  ) {
 
-	if(  HAL_GPIO_ReadPin(  BTN1_GPIO_Port, BTN1_Pin  )  ==  GPIO_PIN_RESET  &&  GPIO_Pin  ==  BTN1_Pin  &&  (  osKernelGetTickCount() - btn1_tick  >  BUTTON_DELAY_BOUND  )  ) {
+	if(  GPIO_Pin  ==  BTN1_Pin  &&  HAL_GPIO_ReadPin(  BTN1_GPIO_Port, BTN1_Pin  )  ==  GPIO_PIN_RESET  &&  (  osKernelGetTickCount() - btn1_tick  >  BUTTON_DELAY_BOUND  )  ) {
 
 		printf(  "Interrupt triggered\r\n"  );
 
