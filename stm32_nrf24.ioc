@@ -1,11 +1,10 @@
 #MicroXplorer Configuration settings - do not modify
-ADC1.Channel-10\#ChannelRegularConversion=ADC_CHANNEL_8
-ADC1.ClockPrescaler=ADC_CLOCK_SYNC_PCLK_DIV6
-ADC1.IPParameters=Rank-10\#ChannelRegularConversion,master,Channel-10\#ChannelRegularConversion,SamplingTime-10\#ChannelRegularConversion,NbrOfConversionFlag,ClockPrescaler,ScanConvMode
+ADC1.Channel-11\#ChannelRegularConversion=ADC_CHANNEL_8
+ADC1.ContinuousConvMode=ENABLE
+ADC1.IPParameters=Rank-11\#ChannelRegularConversion,master,Channel-11\#ChannelRegularConversion,SamplingTime-11\#ChannelRegularConversion,NbrOfConversionFlag,ContinuousConvMode
 ADC1.NbrOfConversionFlag=1
-ADC1.Rank-10\#ChannelRegularConversion=1
-ADC1.SamplingTime-10\#ChannelRegularConversion=ADC_SAMPLETIME_3CYCLES
-ADC1.ScanConvMode=ENABLE
+ADC1.Rank-11\#ChannelRegularConversion=1
+ADC1.SamplingTime-11\#ChannelRegularConversion=ADC_SAMPLETIME_3CYCLES
 ADC1.master=1
 CAD.formats=
 CAD.pinconfig=
