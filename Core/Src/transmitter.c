@@ -41,7 +41,7 @@ void transmit_text(  const char* str  ) {
 		uint32_t msg_len = len>25?25:len;
 		memset(  &msg, 0, 32  );
 
-		msg.status = msg_len>=25?STATUS_TEXT_SENDING:STATUS_TEXT_EOL;
+		msg.status = msg_len  >=  25  ?  STATUS_TEXT_SENDING  :  STATUS_TEXT_EOL;
 		msg.type = PACKET_TEXT;
 
 		memcpy(  msg.payload, str, msg_len  );

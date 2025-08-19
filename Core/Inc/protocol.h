@@ -16,6 +16,7 @@
 #define PACKET_FIRMWARE		4
 #define PACKET_DUMMY		5
 #define PACKET_CHANGE		6
+#define PACKET_STATUS		7
 
 #define FIRMWARE_UPLOADING	1
 #define FIRMWARE_EOL		2
@@ -87,5 +88,12 @@ typedef struct {
 	uint8_t reserved[29];
 
 } __attribute__((packed)) Change_t;
+
+
+typedef struct {
+	uint8_t type;
+	uint8_t checksum;
+	uint8_t reserved[30];
+} __attribute__((packed))  Status_t;
 
 #endif
