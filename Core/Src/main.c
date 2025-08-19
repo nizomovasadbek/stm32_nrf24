@@ -50,6 +50,8 @@
 /* USER CODE BEGIN PD */
 #define KERNEL_HAL		1
 #define KERNEL_RTOS		2
+
+#define BUTTON_DELAY_BOUND	300
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -447,6 +449,9 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, CS_SELECT_Pin|CE_USER_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : USER_LED_Pin */
@@ -455,6 +460,19 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(USER_LED_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : BTN1_Pin */
+  GPIO_InitStruct.Pin = BTN1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(BTN1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : LED1_Pin */
+  GPIO_InitStruct.Pin = LED1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LED1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : CS_SELECT_Pin CE_USER_Pin */
   GPIO_InitStruct.Pin = CS_SELECT_Pin|CE_USER_Pin;
@@ -470,6 +488,9 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(NRF_IRQ_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI0_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
@@ -486,10 +507,22 @@ int _write(int file, char *ptr, int len)
 }
 
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+u32 btn1_tick = 0;
 
-	return;
+void HAL_GPIO_EXTI_Callback(  uint16_t GPIO_Pin  ) {
+
+	if(  HAL_GPIO_ReadPin(  BTN1_GPIO_Port, BTN1_Pin  )  ==  GPIO_PIN_RESET  &&  GPIO_Pin  ==  BTN1_Pin  &&  (  osKernelGetTickCount() - btn1_tick  >  BUTTON_DELAY_BOUND  )  ) {
+
+		printf(  "Interrupt triggered\r\n"  );
+
+		HAL_GPIO_TogglePin(  LED1_GPIO_Port, LED1_Pin  );
+
+		btn1_tick  =  osKernelGetTickCount();
+
+	}
+
 }
+
 
 void ota_init(void) {
 	uint32_t* src =	&_ota_loadaddr;
@@ -525,7 +558,7 @@ void StartDefaultTask(void *argument)
 void send_dummy(void *argument)
 {
   /* USER CODE BEGIN send_dummy */
-  /* Infinite loop */
+	vTaskSuspend(  NULL  );
 	transmit_dummy();
   /* USER CODE END send_dummy */
 }
@@ -555,6 +588,7 @@ void receive_poll(void *argument)
 void ping_send(void *argument)
 {
   /* USER CODE BEGIN ping_send */
+	vTaskSuspend(  NULL  );
   transmit_ping();
   /* USER CODE END ping_send */
 }

@@ -11,6 +11,7 @@
 #include "protocol.h"
 #include "transmitter.h"
 #include "cmsis_os.h"
+#include "string.h"
 
 void transmit_ping(  void  ) {
 
