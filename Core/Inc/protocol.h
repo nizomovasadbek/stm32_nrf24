@@ -93,7 +93,9 @@ typedef struct {
 typedef struct {
 	uint8_t type;
 	uint8_t checksum;
-	uint8_t reserved[30];
+	uint16_t battery;
+	uint16_t temperature;
+	uint8_t reserved[28];
 } __attribute__((packed))  Status_t;
 
 #endif
