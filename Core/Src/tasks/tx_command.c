@@ -31,7 +31,6 @@ void txcommand_poll(  void  ) {
 	while(  osMessageQueueGet(  motor_xHandle,  &stick,  0,  osWaitForever  )  ==  osOK  ) {
 
 		cmd.M1  =  (  u8  )  map(  stick.M1x, 1258, 3480, 0, 255  );
-		transmit(  (  Dummy_t*  ) &cmd  );
 
 		//TODO: map and send all sticks
 
@@ -41,7 +40,7 @@ void txcommand_poll(  void  ) {
 
 		taskEXIT_CRITICAL();
 
-		osDelay(  10  );
+		osDelay(  20  );
 
 	}
 
