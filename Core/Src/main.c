@@ -41,6 +41,8 @@
 #include "tasks/stick_read.h"
 #include "tasks/tx_command.h"
 
+#include "error/error.h"
+
 #include "stddef.h"
 /* USER CODE END Includes */
 
@@ -106,7 +108,7 @@ osThreadId_t StickReadHandle;
 const osThreadAttr_t StickRead_attributes = {
   .name = "StickRead",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+  .priority = (osPriority_t) osPriorityRealtime3,
 };
 /* Definitions for TemperatureLoad */
 osThreadId_t TemperatureLoadHandle;
@@ -119,6 +121,13 @@ const osThreadAttr_t TemperatureLoad_attributes = {
 osThreadId_t TransmitCommandHandle;
 const osThreadAttr_t TransmitCommand_attributes = {
   .name = "TransmitCommand",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for ErrorPollTask */
+osThreadId_t ErrorPollTaskHandle;
+const osThreadAttr_t ErrorPollTask_attributes = {
+  .name = "ErrorPollTask",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
@@ -156,6 +165,7 @@ void ping_send(void *argument);
 void stick_read(void *argument);
 void fetch_temp(void *argument);
 void start_transmit_cmd(void *argument);
+void start_error_poll(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -202,6 +212,8 @@ int main(void)
   MX_USART1_UART_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
+
+  HAL_GPIO_WritePin(  USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_SET  );
 
   csn_high();
   HAL_Delay( 5 );
@@ -280,7 +292,7 @@ int main(void)
   change_permitHandle = osMessageQueueNew (16, sizeof(uint16_t), &change_permit_attributes);
 
   /* creation of motor_x */
-  motor_xHandle = osMessageQueueNew (16, sizeof(uint32_t), &motor_x_attributes);
+  motor_xHandle = osMessageQueueNew (4, sizeof(uint32_t), &motor_x_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
@@ -307,6 +319,9 @@ int main(void)
 
   /* creation of TransmitCommand */
   TransmitCommandHandle = osThreadNew(start_transmit_cmd, NULL, &TransmitCommand_attributes);
+
+  /* creation of ErrorPollTask */
+  ErrorPollTaskHandle = osThreadNew(start_error_poll, NULL, &ErrorPollTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -644,7 +659,11 @@ void ota_init(void) {
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
-	blink_led();
+	while(  1  ) {
+
+		osDelay(  1  );
+
+	}
   /* USER CODE END 5 */
 }
 
@@ -747,6 +766,20 @@ void start_transmit_cmd(void *argument)
   /* USER CODE BEGIN start_transmit_cmd */
   txcommand_poll();
   /* USER CODE END start_transmit_cmd */
+}
+
+/* USER CODE BEGIN Header_start_error_poll */
+/**
+* @brief Function implementing the ErrorPollTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_start_error_poll */
+void start_error_poll(void *argument)
+{
+  /* USER CODE BEGIN start_error_poll */
+	error_poll();
+  /* USER CODE END start_error_poll */
 }
 
 /**

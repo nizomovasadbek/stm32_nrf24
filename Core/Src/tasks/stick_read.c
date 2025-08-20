@@ -26,13 +26,14 @@ void stick_adc_read(  void  ) {
 	while(  1  ) {
 
 		s.M1x = read_adc_channel(  ADC_CHANNEL_8, ADC_SAMPLETIME_15CYCLES  );
-		if(  osMessageQueuePut(  motor_xHandle,  &s,  0,  1  ) != osOK  ) {
+
+		if(  osMessageQueuePut(  motor_xHandle,  &s,  0,  osWaitForever  ) != osOK  ) {
 
 			error_add(  ERROR_QUEUEFULL  );
 
 		}
 
-		osDelay(  20  );
+		osDelay(  10  );
 
 	}
 

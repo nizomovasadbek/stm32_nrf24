@@ -13,21 +13,24 @@
 #include "cmsis_os.h"
 #include "string.h"
 #include "transmitter.h"
+#include "stdio.h"
 
 extern osMessageQueueId_t motor_xHandle;
 
+Command_t cmd;
+
 void txcommand_poll(  void  ) {
 
-	Stick_t s;
-	Command_t cmd;
+	Stick_t stick;
 
-	memset(  &s,  0,  sizeof(  Stick_t  )  );
+	memset(  &stick,  0,  sizeof(  Stick_t  )  );
 	memset(  &cmd,  0,  32  );
 
-	while(  osMessageQueueGet(  motor_xHandle,  &s,  0,  osWaitForever  )  ==  osOK  ) {
+	cmd.type  =  PACKET_COMMAND;
 
-		cmd.type  =  PACKET_COMMAND;
-		cmd.main_motor_X  =  (  u8  )  map(  s.M1x, 1024, 4096, 0, 255  );
+	while(  osMessageQueueGet(  motor_xHandle,  &stick,  0,  osWaitForever  )  ==  osOK  ) {
+
+		cmd.motor_pwm  =  (  u8  )  map(  stick.M1x, 1024, 4096, 0, 255  );
 
 		taskENTER_CRITICAL();
 

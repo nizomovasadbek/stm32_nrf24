@@ -9,6 +9,14 @@
 #include "error/error.h"
 
 static u8 errors;
+static u8 fault_list[] = {
+
+		0, // READYOK
+		1, //ERROR_QUEUEFULL
+		2, //ERROR_TRANSMIT
+		3, //ERROR_CHECKSUM
+
+};
 
 void error_poll(  void  ) {
 
@@ -16,7 +24,23 @@ void error_poll(  void  ) {
 
 		if(  !errors  )   continue;
 
-		// TODO: Error handle
+		u8 track = 0;
+
+		while(  errors  ) {
+
+			track++;
+
+			if(  errors  &  0x01  ) {
+
+				_pulse(  fault_list[  track  ],  SHORT_DELAY  );
+
+			}
+
+			errors =  (  errors  >>  1  );
+
+		}
+
+		osDelay(  1000  );
 
 	}
 
@@ -24,6 +48,8 @@ void error_poll(  void  ) {
 
 
 void error_add(  u8 error_type  ) {
+
+	errors  |=  error_type;
 
 }
 
@@ -37,6 +63,6 @@ void _pulse(  u32 times,  u32 delay  ) {
 
 	}
 
-	HAL_GPIO_WritePin(  ERROR_LED_PORT, ERROR_LED_PIN, GPIO_PIN_RESET  );
+	HAL_GPIO_WritePin(  ERROR_LED_PORT, ERROR_LED_PIN, GPIO_PIN_SET  );
 
 }
