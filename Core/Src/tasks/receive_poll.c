@@ -32,6 +32,9 @@ void rx_poll(  Dummy_t* data  ) {
 			taskENTER_CRITICAL();
 
 			nrf24_listen();
+
+			while(  !nrf24_data_available()  );
+
 			nrf24_receive(  (  uint8_t*  )  data, 32  );
 			nrf24_stop_listen();
 

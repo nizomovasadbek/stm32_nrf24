@@ -12,23 +12,27 @@
 #include "cmsis_os.h"
 #include "type.h"
 #include "stdio.h"
+#include "adc.h"
+
+#include "error/error.h"
 
 extern ADC_HandleTypeDef hadc1;
+extern osMessageQueueId_t motor_xHandle;
 
+Stick_t s;
+//TODO: Read all adc channels and pack into one struct
 void stick_adc_read(  void  ) {
-
-	u32 val = 0;
 
 	while(  1  ) {
 
-		HAL_ADC_Start(  &hadc1  );
-		HAL_ADC_PollForConversion(  &hadc1, 100  );
+		s.M1x = read_adc_channel(  ADC_CHANNEL_8, ADC_SAMPLETIME_15CYCLES  );
+		if(  osMessageQueuePut(  motor_xHandle,  &s,  0,  1  ) != osOK  ) {
 
-		val = HAL_ADC_GetValue(  &hadc1  );
-		printf(  "%u\r\n", val  );
+			error_add(  ERROR_QUEUEFULL  );
 
+		}
 
-		osDelay(  800  );
+		osDelay(  20  );
 
 	}
 

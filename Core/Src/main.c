@@ -32,12 +32,14 @@
 #include "transmitter.h"
 #include "ota.h"
 #include "logger.h"
+#include "adc.h"
 
 #include "tasks/blinkled.h"
 #include "tasks/txdummy.h"
 #include "tasks/receive_poll.h"
 #include "tasks/ping.h"
 #include "tasks/stick_read.h"
+#include "tasks/tx_command.h"
 
 #include "stddef.h"
 /* USER CODE END Includes */
@@ -106,10 +108,29 @@ const osThreadAttr_t StickRead_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for TemperatureLoad */
+osThreadId_t TemperatureLoadHandle;
+const osThreadAttr_t TemperatureLoad_attributes = {
+  .name = "TemperatureLoad",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for TransmitCommand */
+osThreadId_t TransmitCommandHandle;
+const osThreadAttr_t TransmitCommand_attributes = {
+  .name = "TransmitCommand",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* Definitions for change_permit */
 osMessageQueueId_t change_permitHandle;
 const osMessageQueueAttr_t change_permit_attributes = {
   .name = "change_permit"
+};
+/* Definitions for motor_x */
+osMessageQueueId_t motor_xHandle;
+const osMessageQueueAttr_t motor_x_attributes = {
+  .name = "motor_x"
 };
 /* Definitions for dataMutex */
 osMutexId_t dataMutexHandle;
@@ -133,6 +154,8 @@ void send_dummy(void *argument);
 void receive_poll(void *argument);
 void ping_send(void *argument);
 void stick_read(void *argument);
+void fetch_temp(void *argument);
+void start_transmit_cmd(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -256,6 +279,9 @@ int main(void)
   /* creation of change_permit */
   change_permitHandle = osMessageQueueNew (16, sizeof(uint16_t), &change_permit_attributes);
 
+  /* creation of motor_x */
+  motor_xHandle = osMessageQueueNew (16, sizeof(uint32_t), &motor_x_attributes);
+
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
@@ -275,6 +301,12 @@ int main(void)
 
   /* creation of StickRead */
   StickReadHandle = osThreadNew(stick_read, NULL, &StickRead_attributes);
+
+  /* creation of TemperatureLoad */
+  TemperatureLoadHandle = osThreadNew(fetch_temp, NULL, &TemperatureLoad_attributes);
+
+  /* creation of TransmitCommand */
+  TransmitCommandHandle = osThreadNew(start_transmit_cmd, NULL, &TransmitCommand_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -368,7 +400,7 @@ static void MX_ADC1_Init(void)
   hadc1.Instance = ADC1;
   hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
-  hadc1.Init.ScanConvMode = DISABLE;
+  hadc1.Init.ScanConvMode = ENABLE;
   hadc1.Init.ContinuousConvMode = ENABLE;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
@@ -607,6 +639,7 @@ void ota_init(void) {
   * @param  argument: Not used
   * @retval None
   */
+
 /* USER CODE END Header_StartDefaultTask */
 void StartDefaultTask(void *argument)
 {
@@ -672,6 +705,48 @@ void stick_read(void *argument)
   /* USER CODE BEGIN stick_read */
   stick_adc_read();
   /* USER CODE END stick_read */
+}
+
+/* USER CODE BEGIN Header_fetch_temp */
+/**
+* @brief Function implementing the TemperatureLoad thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_fetch_temp */
+void fetch_temp(void *argument)
+{
+  /* USER CODE BEGIN fetch_temp */
+  /* Infinite loop */
+  for(  ;;  )
+  {
+
+	  u32 val = read_adc_channel(  ADC_CHANNEL_TEMPSENSOR, ADC_SAMPLETIME_480CYCLES  );
+
+	  float temp = (  (  float  ) val /  (  float  )  4095  ) * 3.3f;
+	  temp = (  (  temp - 0.76f  ) / 0.0025f  ) + 25.0f;
+
+	  printf(  "Temp: %d\r\n",  (  int  )  temp  );
+
+
+	  osDelay(1000);
+
+  }
+  /* USER CODE END fetch_temp */
+}
+
+/* USER CODE BEGIN Header_start_transmit_cmd */
+/**
+* @brief Function implementing the TransmitCommand thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_start_transmit_cmd */
+void start_transmit_cmd(void *argument)
+{
+  /* USER CODE BEGIN start_transmit_cmd */
+  txcommand_poll();
+  /* USER CODE END start_transmit_cmd */
 }
 
 /**

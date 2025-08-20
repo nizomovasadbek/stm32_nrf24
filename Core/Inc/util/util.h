@@ -19,4 +19,6 @@
 OTAFUS uint8_t calculate_checksum( Dummy_t* packet );
 OTAFUS uint8_t validate_checksum( Dummy_t* packet );
 
+uint32_t map(  uint32_t, uint32_t, uint32_t, uint32_t, uint32_t  );
+
 #endif /* INC_UTIL_H_ */
