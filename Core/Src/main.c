@@ -122,7 +122,7 @@ osThreadId_t TransmitCommandHandle;
 const osThreadAttr_t TransmitCommand_attributes = {
   .name = "TransmitCommand",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+  .priority = (osPriority_t) osPriorityRealtime2,
 };
 /* Definitions for ErrorPollTask */
 osThreadId_t ErrorPollTaskHandle;
