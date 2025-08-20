@@ -20,8 +20,7 @@ hardware_reset:
 software_reset:
 	ldr r0, =_estack
 	msr msp, r0
-	ldr r1, =0x08000000
-	ldr r2, [r1, #4]
+	ldr r2, =0x08000004
 	bx r2
 	b .
 .size software_reset, .-software_reset
