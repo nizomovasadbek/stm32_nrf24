@@ -51,19 +51,6 @@ typedef struct {
 
 	uint8_t type;
 	uint8_t checksum;
-	uint8_t motor_address;
-	uint8_t direction;
-	uint8_t motor_pwm;
-	uint8_t main_motor_X;
-	uint8_t main_motor_Y;
-	uint8_t reserved[25];
-
-} __attribute__((packed)) Command_t;
-
-typedef struct {
-
-	uint8_t type;
-	uint8_t checksum;
 	uint8_t M1;
 	uint8_t M2;
 	uint8_t M3;
@@ -76,7 +63,7 @@ typedef struct {
 
 	uint8_t reserved[21];
 
-} __attribute__((packed)) nCommand_t ;
+} __attribute__((packed)) Command_t;
 
 #define STATUS_TEXT_SENDING			1
 #define STATUS_TEXT_EOL				2

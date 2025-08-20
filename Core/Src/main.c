@@ -254,10 +254,10 @@ int main(void)
   Command_t cmd;
   memset( &cmd, 0, sizeof( cmd ) );
   cmd.type = PACKET_COMMAND;
-  cmd.direction = 2;
-  cmd.motor_pwm = 137;
-  cmd.motor_address = 3;
-  cmd.main_motor_X = 45;
+  cmd.M1 = 2;
+  cmd.M2 = 137;
+  cmd.M3 = 3;
+  cmd.M4 = 45;
   transmit( ( Dummy_t* ) &cmd );
   HAL_Delay( 1000 );
 
