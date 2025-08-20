@@ -60,6 +60,24 @@ typedef struct {
 
 } __attribute__((packed)) Command_t;
 
+typedef struct {
+
+	uint8_t type;
+	uint8_t checksum;
+	uint8_t M1;
+	uint8_t M2;
+	uint8_t M3;
+	uint8_t M4;
+	uint8_t M5;
+	uint8_t M6;
+	uint8_t M7;
+	uint8_t M8;
+	uint8_t M9;
+
+	uint8_t reserved[21];
+
+} __attribute__((packed)) nCommand_t ;
+
 #define STATUS_TEXT_SENDING			1
 #define STATUS_TEXT_EOL				2
 

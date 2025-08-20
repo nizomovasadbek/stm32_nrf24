@@ -38,7 +38,7 @@ OTAFUS uint8_t validate_checksum(  Dummy_t* packet  ) {
 
 }
 
-uint32_t map(  uint32_t value, uint32_t fromMin, uint32_t fromMax, uint32_t toMin, uint32_t toMax  ) {
+int32_t map(  int32_t value, int32_t fromMin, int32_t fromMax, int32_t toMin, int32_t toMax  ) {
 
 	return (  value - fromMin  ) * (  toMax - toMin  ) / (  fromMax - fromMin  ) + toMin;
 

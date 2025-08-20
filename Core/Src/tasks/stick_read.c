@@ -26,6 +26,7 @@ void stick_adc_read(  void  ) {
 	while(  1  ) {
 
 		s.M1x = read_adc_channel(  ADC_CHANNEL_8, ADC_SAMPLETIME_15CYCLES  );
+		//TODO: add all sticks
 
 		if(  osMessageQueuePut(  motor_xHandle,  &s,  0,  osWaitForever  ) != osOK  ) {
 
