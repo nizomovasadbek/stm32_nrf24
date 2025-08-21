@@ -292,7 +292,7 @@ int main(void)
   change_permitHandle = osMessageQueueNew (16, sizeof(uint16_t), &change_permit_attributes);
 
   /* creation of motor_x */
-  motor_xHandle = osMessageQueueNew (20, sizeof(uint32_t), &motor_x_attributes);
+  motor_xHandle = osMessageQueueNew (1, sizeof(uint32_t), &motor_x_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
