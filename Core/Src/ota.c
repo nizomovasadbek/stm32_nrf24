@@ -10,11 +10,11 @@
 
 OTAFUS void SPI1_transmit( u8 data ) {
 
-	while( !( kSPI1.SPI_SR & ( 1 << TXE ) ) );
+	while(  !(  kSPI1.SPI_SR & (  1 << TXE  )  )  );
 
 	kSPI1.SPI_DR = data;
 
-	while( !( kSPI1.SPI_SR & ( 1 << TXE ) ) );
+	while(  (  kSPI1.SPI_SR & (  1 << BSY  )  )  );
 
 }
 
