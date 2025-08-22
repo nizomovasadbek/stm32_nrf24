@@ -197,4 +197,10 @@ SECTIONS
   }
 
   .ARM.attributes 0 : { *(.ARM.attributes) }
+  
+  .magic : 
+  {
+  	KEEP(*(.magic))
+  } >FLASH
+  
 }
