@@ -101,7 +101,7 @@ osThreadId_t pingSendHandle;
 const osThreadAttr_t pingSend_attributes = {
   .name = "pingSend",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+  .priority = (osPriority_t) osPriorityAboveNormal4,
 };
 /* Definitions for StickRead */
 osThreadId_t StickReadHandle;
@@ -129,7 +129,7 @@ osThreadId_t ErrorPollTaskHandle;
 const osThreadAttr_t ErrorPollTask_attributes = {
   .name = "ErrorPollTask",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+  .priority = (osPriority_t) osPriorityLow2,
 };
 /* Definitions for change_permit */
 osMessageQueueId_t change_permitHandle;
@@ -289,7 +289,7 @@ int main(void)
 
   /* Create the queue(s) */
   /* creation of change_permit */
-  change_permitHandle = osMessageQueueNew (16, sizeof(uint16_t), &change_permit_attributes);
+  change_permitHandle = osMessageQueueNew (16, sizeof(uint32_t), &change_permit_attributes);
 
   /* creation of motor_x */
   motor_xHandle = osMessageQueueNew (1, sizeof(uint32_t), &motor_x_attributes);
