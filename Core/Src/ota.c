@@ -84,7 +84,7 @@ OTAFUS void flash_write( u32 addr, u16 data, u8 lock ) {
 }
 
 
-OTAFUS void ota_memset(  void* ptr, u32 value, u32 size  ) {
+OTAFUS void ota_memset(  void* ptr, u8 value, u32 size  ) {
 
 	while(  size--  ) {
 
