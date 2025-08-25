@@ -22,6 +22,7 @@
 #define ERROR_QUEUEFULL		0x01
 #define ERROR_TRANSMIT		0x02
 #define ERROR_CHECKSUM		0x04
+#define ERROR_HARDFAULT		0x08
 
 #define SHORT_DELAY			100
 #define LONG_DELAY			500

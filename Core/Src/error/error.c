@@ -15,6 +15,7 @@ static u8 fault_list[] = {
 		1, //ERROR_QUEUEFULL
 		2, //ERROR_TRANSMIT
 		3, //ERROR_CHECKSUM
+		4, //ERROR_HARDFAULT
 
 };
 
