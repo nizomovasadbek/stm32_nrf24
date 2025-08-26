@@ -25,8 +25,6 @@ void error_poll(  void  ) {
 
 		osDelay(  1000  );
 
-		if(  !errors  )   continue;
-
 		u8 track = 0;
 
 		while(  errors  ) {

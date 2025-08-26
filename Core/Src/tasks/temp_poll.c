@@ -8,6 +8,8 @@
 
 #include "tasks/temp_poll.h"
 
+extern osMessageQueueId_t MCUTempHandle;
+
 void temperature_poll(  void  ) {
 
 	__attribute__((unused))  u16 temperature;
@@ -20,6 +22,8 @@ void temperature_poll(  void  ) {
 		T = (  (  T - 0.76f  ) / 0.0025f  ) + 25.0f;
 
 		temperature = (  u16  ) T;
+
+		osMessageQueuePut(  MCUTempHandle, &temperature, 0, osWaitForever  );
 
 		osDelay(  2000  );
 
