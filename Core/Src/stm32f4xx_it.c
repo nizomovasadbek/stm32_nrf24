@@ -24,6 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include "logger.h"
 #include <stdio.h>
+#include "error/error.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -89,7 +90,8 @@ void NMI_Handler(void)
 void HardFault_Handler(void)
 {
   /* USER CODE BEGIN HardFault_IRQn 0 */
-	printf("Hard fault\r\n");
+	printf(  "Hard fault\r\n"  );
+	error_add(  ERROR_HARDFAULT  );
   /* USER CODE END HardFault_IRQn 0 */
   while (1)
   {
