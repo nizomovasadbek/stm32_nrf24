@@ -31,7 +31,7 @@ void txcommand_poll(  void  ) {
 
 	while(  1  ) {
 
-		if(  !osMessageQueueGet(  motor_xHandle, &stick, 0, osWaitForever  )  ==  osOK  ) {
+		if(  osMessageQueueGet(  motor_xHandle, &stick, 0, osWaitForever  )  !=  osOK  ) {
 
 			error_add(  ERROR_QUEUEFULL  );
 
