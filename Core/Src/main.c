@@ -725,7 +725,6 @@ void fetch_temp(void *argument)
 
 	  printf(  "Temp: %d\r\n",  (  int  )  temp  );
 
-
 	  osDelay(  1000  );
 
   }
