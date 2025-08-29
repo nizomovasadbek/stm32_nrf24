@@ -14,6 +14,7 @@
 #include "string.h"
 #include "transmitter.h"
 #include "stdio.h"
+#include "error/error.h"
 
 extern osMessageQueueId_t motor_xHandle;
 
@@ -28,7 +29,13 @@ void txcommand_poll(  void  ) {
 
 	cmd.type  =  PACKET_COMMAND;
 
-	while(  osMessageQueueGet(  motor_xHandle,  &stick,  0,  osWaitForever  )  ==  osOK  ) {
+	while(  1  ) {
+
+		if(  !osMessageQueueGet(  motor_xHandle, &stick, 0, osWaitForever  )  ==  osOK  ) {
+
+			error_add(  ERROR_QUEUEFULL  );
+
+		}
 
 		cmd.M1  =  (  u8  )  map(  stick.M1x, 1258, 3480, 0, 255  );
 
