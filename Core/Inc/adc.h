@@ -10,6 +10,13 @@
 
 #include "type.h"
 
+typedef struct {
+
+	u16 M1;
+	u16 temp;
+
+} ADCValues_t;
+
 u16 read_adc_channel(  u32 channel, u32 sample_rate  );
 
 
