@@ -139,11 +139,6 @@ osMessageQueueId_t motor_xHandle;
 const osMessageQueueAttr_t motor_x_attributes = {
   .name = "motor_x"
 };
-/* Definitions for MCUTemp */
-osMessageQueueId_t MCUTempHandle;
-const osMessageQueueAttr_t MCUTemp_attributes = {
-  .name = "MCUTemp"
-};
 /* Definitions for dataMutex */
 osMutexId_t dataMutexHandle;
 const osMutexAttr_t dataMutex_attributes = {
@@ -294,9 +289,6 @@ int main(void)
 
   /* creation of motor_x */
   motor_xHandle = osMessageQueueNew (1, sizeof(uint32_t), &motor_x_attributes);
-
-  /* creation of MCUTemp */
-  MCUTempHandle = osMessageQueueNew (1, sizeof(uint16_t), &MCUTemp_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
