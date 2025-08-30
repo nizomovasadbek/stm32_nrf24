@@ -280,7 +280,7 @@ int main(void)
 
   /* Create the queue(s) */
   /* creation of change_permit */
-  change_permitHandle = osMessageQueueNew (16, sizeof(uint32_t), &change_permit_attributes);
+  change_permitHandle = osMessageQueueNew (1, sizeof(uint32_t), &change_permit_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
