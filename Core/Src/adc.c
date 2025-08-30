@@ -11,7 +11,7 @@
 
 extern ADC_HandleTypeDef hadc1;
 
-u16 read_adc_channel(  u32 channel, u32 sample_rate  ) {
+__attribute__((unused)) u16 read_adc_channel(  u32 channel, u32 sample_rate  ) {
 
 	ADC_ChannelConfTypeDef sConfig;
 

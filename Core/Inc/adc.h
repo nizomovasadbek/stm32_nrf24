@@ -13,7 +13,6 @@
 typedef struct {
 
 	u16 M1;
-	u16 temp;
 
 } ADCValues_t;
 

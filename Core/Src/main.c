@@ -38,7 +38,6 @@
 #include "tasks/txdummy.h"
 #include "tasks/receive_poll.h"
 #include "tasks/ping.h"
-#include "tasks/stick_read.h"
 #include "tasks/tx_command.h"
 
 #include "error/error.h"
@@ -57,17 +56,22 @@
 #define KERNEL_RTOS		2
 
 #define BUTTON_DELAY_BOUND	300
+
+#define CHANNEL 0x45
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 uint8_t KERNEL_MODE = KERNEL_HAL;
-#define CHANNEL 0x45
+
 uint8_t address[5] = { 0, 0, 0, 0, 1 };
+
+volatile ADCValues_t adc;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
+DMA_HandleTypeDef hdma_adc1;
 
 SPI_HandleTypeDef hspi1;
 
@@ -100,13 +104,6 @@ const osThreadAttr_t pingSend_attributes = {
   .name = "pingSend",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityAboveNormal4,
-};
-/* Definitions for StickRead */
-osThreadId_t StickReadHandle;
-const osThreadAttr_t StickRead_attributes = {
-  .name = "StickRead",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityRealtime3,
 };
 /* Definitions for TemperatureLoad */
 osThreadId_t TemperatureLoadHandle;
@@ -152,6 +149,7 @@ Dummy_t rxdata;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_ADC1_Init(void);
@@ -159,7 +157,6 @@ void StartDefaultTask(void *argument);
 void send_dummy(void *argument);
 void receive_poll(void *argument);
 void ping_send(void *argument);
-void stick_read(void *argument);
 void fetch_temp(void *argument);
 void start_transmit_cmd(void *argument);
 void start_error_poll(void *argument);
@@ -182,8 +179,8 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
 	set_log_level(  LEVEL_INFO | LEVEL_ERROR  );
-//	ota_init();
 	copy_text();
+	memset(  (  void*  )  &adc, 0, sizeof(  ADCValues_t  )  );
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -204,12 +201,15 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_SPI1_Init();
   MX_USART1_UART_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
 
   HAL_GPIO_WritePin(  USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_SET  );
+
+  HAL_ADC_Start_DMA(  &hadc1, (  uint32_t*  ) &adc , 1);
 
   csn_high();
   HAL_Delay( 5 );
@@ -306,9 +306,6 @@ int main(void)
 
   /* creation of pingSend */
   pingSendHandle = osThreadNew(ping_send, NULL, &pingSend_attributes);
-
-  /* creation of StickRead */
-  StickReadHandle = osThreadNew(stick_read, NULL, &StickRead_attributes);
 
   /* creation of TemperatureLoad */
   TemperatureLoadHandle = osThreadNew(fetch_temp, NULL, &TemperatureLoad_attributes);
@@ -512,6 +509,22 @@ static void MX_USART1_UART_Init(void)
 }
 
 /**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA2_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA2_Stream0_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -680,20 +693,6 @@ void ping_send(void *argument)
 //	vTaskSuspend(  NULL  );
   transmit_ping();
   /* USER CODE END ping_send */
-}
-
-/* USER CODE BEGIN Header_stick_read */
-/**
-* @brief Function implementing the StickRead thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_stick_read */
-void stick_read(void *argument)
-{
-  /* USER CODE BEGIN stick_read */
-  stick_adc_read();
-  /* USER CODE END stick_read */
 }
 
 /* USER CODE BEGIN Header_fetch_temp */
