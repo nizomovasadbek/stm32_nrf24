@@ -131,11 +131,6 @@ osMessageQueueId_t change_permitHandle;
 const osMessageQueueAttr_t change_permit_attributes = {
   .name = "change_permit"
 };
-/* Definitions for motor_x */
-osMessageQueueId_t motor_xHandle;
-const osMessageQueueAttr_t motor_x_attributes = {
-  .name = "motor_x"
-};
 /* Definitions for dataMutex */
 osMutexId_t dataMutexHandle;
 const osMutexAttr_t dataMutex_attributes = {
@@ -286,9 +281,6 @@ int main(void)
   /* Create the queue(s) */
   /* creation of change_permit */
   change_permitHandle = osMessageQueueNew (16, sizeof(uint32_t), &change_permit_attributes);
-
-  /* creation of motor_x */
-  motor_xHandle = osMessageQueueNew (1, sizeof(uint32_t), &motor_x_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */

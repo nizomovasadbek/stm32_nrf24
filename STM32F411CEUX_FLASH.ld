@@ -200,7 +200,7 @@ SECTIONS
   
   .magic : 
   {
-  	KEEP(*(.magic))
+  	LONG(0x12345678)
   } >FLASH
   
 }
