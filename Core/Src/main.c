@@ -698,6 +698,7 @@ void fetch_temp(void *argument)
 {
   /* USER CODE BEGIN fetch_temp */
   /* Infinite loop */
+	vTaskSuspend(  NULL  );
   for(  ;;  )
   {
 
