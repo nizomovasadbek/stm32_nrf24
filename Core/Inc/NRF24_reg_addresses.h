@@ -129,7 +129,7 @@
 #define KERNEL_HAL		1
 #define KERNEL_RTOS		2
 
-#define HOLD_TIME 20
+#define HOLD_TIME 7
 
 #endif
 
