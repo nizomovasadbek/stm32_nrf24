@@ -8,7 +8,7 @@
 
 copy_text:
 
-	push {r0, r1, r2, r3}
+	push {r0, r1, r2, r3, lr}
 
 	ldr r0, =_ota_loadaddr
 	ldr r1, =_ota_begin
@@ -23,7 +23,6 @@ copy_text_loop:
 	cmp r1, r2
 	blt copy_text_loop
 
-	pop {r0, r1, r2, r3}
-	bx lr
+	pop {r0, r1, r2, r3, pc}
 
 .size copy_text, .-copy_text
