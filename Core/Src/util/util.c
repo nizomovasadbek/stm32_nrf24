@@ -9,6 +9,10 @@
 
 OTAFUS uint8_t calculate_checksum(  Dummy_t* packet  ) {
 
+	if(  !packet  ) {
+		return 0;
+	}
+
 	packet->checksum = 0;
 	uint8_t* decoy = (  uint8_t*  ) packet;
 	uint8_t result = 0;

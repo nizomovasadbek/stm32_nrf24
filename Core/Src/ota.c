@@ -49,7 +49,9 @@ OTAFUS void flash_lock( void ) {
 	kFLASH.FLASH_CR |= ( 1 << LOCK );
 
 }
-
+/*
+ * Any action before firmware trigger interrupt must be disabled
+ */
 OTAFUS void flash_erase() {
 
 	flash_unlock();

@@ -13,8 +13,8 @@
 #include "protocol.h"
 #include "ota.h"
 
-#define VALIDATE_FAIL		0
-#define VALIDATE_OK			1
+#define VALIDATE_FAIL		1
+#define VALIDATE_OK			2
 
 OTAFUS uint8_t calculate_checksum( Dummy_t* packet );
 OTAFUS uint8_t validate_checksum( Dummy_t* packet );
