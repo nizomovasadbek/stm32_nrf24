@@ -26,9 +26,9 @@ typedef struct {
 	uint8_t type;
 	uint8_t checksum;
 	uint8_t	mode;
-	uint8_t len;
+	uint32_t seq;
 	uint8_t payload[16];
-	uint8_t reserved[12];
+	uint8_t reserved[9];
 
 } __attribute__((packed)) Firmware_t;
 
