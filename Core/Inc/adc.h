@@ -8,11 +8,13 @@
 #ifndef INC_ADC_H_
 #define INC_ADC_H_
 
+#include "stdint.h"
 #include "type.h"
 
 typedef struct {
 
-	u16 M1;
+	uint16_t M1;
+	uint16_t temp;
 
 } ADCValues_t;
 

@@ -66,7 +66,7 @@ uint8_t KERNEL_MODE = KERNEL_HAL;
 
 uint8_t address[5] = { 0, 0, 0, 0, 1 };
 
-volatile ADCValues_t adc;
+ADCValues_t adc;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -204,7 +204,7 @@ int main(void)
 
   HAL_GPIO_WritePin(  USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_SET  );
 
-  HAL_ADC_Start_DMA(  &hadc1, (  uint32_t*  ) &adc , 1);
+  HAL_ADC_Start_DMA(  &hadc1, (  uint32_t*  ) &adc , 2  );
 
   csn_high();
   HAL_Delay( 5 );
@@ -406,8 +406,8 @@ static void MX_ADC1_Init(void)
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 1;
-  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.NbrOfConversion = 2;
+  hadc1.Init.DMAContinuousRequests = ENABLE;
   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
   {
@@ -418,7 +418,17 @@ static void MX_ADC1_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_8;
   sConfig.Rank = 1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  sConfig.SamplingTime = ADC_SAMPLETIME_15CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
+  sConfig.Rank = 2;
+  sConfig.SamplingTime = ADC_SAMPLETIME_144CYCLES;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -698,18 +708,17 @@ void fetch_temp(void *argument)
 {
   /* USER CODE BEGIN fetch_temp */
   /* Infinite loop */
-	vTaskSuspend(  NULL  );
   for(  ;;  )
   {
 
-	  u32 val = read_adc_channel(  ADC_CHANNEL_TEMPSENSOR, ADC_SAMPLETIME_480CYCLES  );
+	  u32 val = adc.temp;
 
 	  float temp = (  (  float  ) val /  (  float  )  4095  ) * 3.3f;
 	  temp = (  (  temp - 0.76f  ) / 0.0025f  ) + 25.0f;
 
 	  printf(  "Temp: %d\r\n",  (  int  )  temp  );
 
-	  osDelay(  1000  );
+	  osDelay(  2000  );
 
   }
   /* USER CODE END fetch_temp */

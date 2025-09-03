@@ -16,7 +16,7 @@
 #include "error/error.h"
 #include "adc.h"
 
-extern volatile ADCValues_t adc;
+extern ADCValues_t adc;
 
 Command_t cmd;
 
@@ -29,6 +29,7 @@ void txcommand_poll(  void  ) {
 	while(  1  ) {
 
 		cmd.M1  =  (  u8  )  map(  adc.M1, 1258, 3480, 0, 255  );
+		printf(  "Motor PWM: %d\r\n", cmd.M1  );
 
 		//TODO: map and send all sticks
 
