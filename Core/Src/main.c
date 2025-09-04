@@ -52,6 +52,12 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
+#define BTN1_PRESS		0x00
+#define BTN2_PRESS		0x01
+#define BTN3_PRESS		0x02
+#define BTN4_PRESS		0x04
+
 #define KERNEL_HAL		1
 #define KERNEL_RTOS		2
 
@@ -63,10 +69,11 @@
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 uint8_t KERNEL_MODE = KERNEL_HAL;
+volatile uint8_t BUTTON_STATUS = 0;
 
 uint8_t address[5] = { 0, 0, 0, 0, 1 };
 
-ADCValues_t adc;
+volatile ADCValues_t adc;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -541,14 +548,11 @@ static void MX_GPIO_Init(void)
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, CS_SELECT_Pin|CE_USER_Pin, GPIO_PIN_RESET);
@@ -560,18 +564,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(USER_LED_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : BTN1_Pin */
-  GPIO_InitStruct.Pin = BTN1_Pin;
+  /*Configure GPIO pins : BTN1_Pin BTN2_Pin BTN3_Pin BTN4_Pin */
+  GPIO_InitStruct.Pin = BTN1_Pin|BTN2_Pin|BTN3_Pin|BTN4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(BTN1_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : LED1_Pin */
-  GPIO_InitStruct.Pin = LED1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED1_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pins : CS_SELECT_Pin CE_USER_Pin */
   GPIO_InitStruct.Pin = CS_SELECT_Pin|CE_USER_Pin;
@@ -587,11 +584,11 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(NRF_IRQ_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI0_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(EXTI0_IRQn);
-
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
@@ -605,22 +602,7 @@ int _write(int file, char *ptr, int len)
 	return len;
 }
 
-
-u32 btn1_tick = 0;
-
-void HAL_GPIO_EXTI_Callback(  uint16_t GPIO_Pin  ) {
-
-	if(  GPIO_Pin  ==  BTN1_Pin  &&  HAL_GPIO_ReadPin(  BTN1_GPIO_Port, BTN1_Pin  )  ==  GPIO_PIN_RESET  &&  (  osKernelGetTickCount() - btn1_tick  >  BUTTON_DELAY_BOUND  )  ) {
-
-		printf(  "Interrupt triggered\r\n"  );
-
-		HAL_GPIO_TogglePin(  LED1_GPIO_Port, LED1_Pin  );
-
-		btn1_tick  =  osKernelGetTickCount();
-
-	}
-
-}
+//	if(  GPIO_Pin  ==  BTN1_Pin  &&  HAL_GPIO_ReadPin(  BTN1_GPIO_Port, BTN1_Pin  )  ==  GPIO_PIN_RESET  &&  (  osKernelGetTickCount() - btn1_tick  >  BUTTON_DELAY_BOUND  )  ) {
 
 
 void ota_init(void) {
@@ -629,6 +611,47 @@ void ota_init(void) {
 	while(dst < &_ota_end) {
 		*dst++ = *src++;
 	}
+}
+
+volatile uint32_t btn1_tick = 0;
+volatile uint32_t btn2_tick = 0;
+volatile uint32_t btn3_tick = 0;
+volatile uint32_t btn4_tick = 0;
+
+void HAL_GPIO_EXTI_Callback(  uint16_t GPIO_Pin  ) {
+
+	if(  GPIO_Pin  ==  BTN1_Pin  &&  HAL_GPIO_ReadPin(  BTN1_GPIO_Port, BTN1_Pin  )  ==  GPIO_PIN_RESET  &&  (  osKernelGetTickCount()  -  btn1_tick  >  BUTTON_DELAY_BOUND  )  ) {
+		//do BTN1 action
+
+		asm volatile(  "nop"  );
+		BUTTON_STATUS |= (  1 << BTN1_PRESS  );
+		btn1_tick = osKernelGetTickCount();
+	}
+
+	if(  GPIO_Pin  == BTN2_Pin  &&  HAL_GPIO_ReadPin(  BTN2_GPIO_Port, BTN2_Pin  )  ==  GPIO_PIN_RESET  &&  (  osKernelGetTickCount()  -  btn2_tick  >  BUTTON_DELAY_BOUND  )  ) {
+		//do BTN2 action
+
+		asm volatile(  "nop"  );
+		BUTTON_STATUS |= (  1 << BTN2_PRESS  );
+		btn2_tick = osKernelGetTickCount();
+	}
+
+	if(  GPIO_Pin  == BTN3_Pin  &&  HAL_GPIO_ReadPin(  BTN3_GPIO_Port, BTN3_Pin  )  ==  GPIO_PIN_RESET  &&  (  osKernelGetTickCount()  -  btn3_tick  >  BUTTON_DELAY_BOUND  )  ) {
+		//do BTN3 action
+
+		asm volatile(  "nop"  );
+		BUTTON_STATUS |= (  1 << BTN3_PRESS  );
+		btn3_tick = osKernelGetTickCount();
+	}
+
+	if(  GPIO_Pin  == BTN4_Pin  &&  HAL_GPIO_ReadPin(  BTN4_GPIO_Port, BTN4_Pin  )  ==  GPIO_PIN_RESET  &&  (  osKernelGetTickCount()  -  btn4_tick  >  BUTTON_DELAY_BOUND  )  ) {
+		//do BTN4 action
+
+		asm volatile(  "nop"  );
+		BUTTON_STATUS |= (  1 << BTN4_PRESS  );
+		btn4_tick = osKernelGetTickCount();
+	}
+
 }
 
 /* USER CODE END 4 */
