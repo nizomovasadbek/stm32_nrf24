@@ -470,6 +470,7 @@ uint8_t nrf24_transmit( uint8_t *data, uint8_t size ){
 	ce_low(  );
 
 	if( nrf24_r_status(  ) & ( 1 << MAX_RT ) ){
+		//TOOD: Instead of MAX_RT, it should be
 		nrf24_clear_max_rt(  );
 		nrf24_flush_tx(  );
 		return 1;
