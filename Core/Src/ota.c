@@ -8,7 +8,7 @@
 
 #include "ota.h"
 
-OTAFUS void SPI1_transmit( u8 data ) {
+OTAFUS void SPI1_transmit(  u16 data  ) {
 
 	while(  !(  kSPI1.SPI_SR & (  1 << TXE  )  )  );
 
@@ -18,10 +18,11 @@ OTAFUS void SPI1_transmit( u8 data ) {
 
 }
 
-OTAFUS u8 SPI1_receive( void ) {
+OTAFUS u16 SPI1_receive(  void  ) {
 
-	u8 result;
-	while( !( kSPI1.SPI_SR & ( 1 << RXNE ) ) );
+	u16 result;
+
+	while(  !(  kSPI1.SPI_SR  &  (  1 << RXNE  )  )  );
 
 	result = kSPI1.SPI_DR;
 
@@ -29,17 +30,17 @@ OTAFUS u8 SPI1_receive( void ) {
 
 }
 
-OTAFUS void flash_unlock( void ) {
+OTAFUS void flash_unlock(  void  ) {
 
-	while( kFLASH.FLASH_SR & ( 1 << FLASH_BUSY ) );
+	while(  kFLASH.FLASH_SR & (  1 << FLASH_BUSY  )  );
 
 
-	if( kFLASH.FLASH_CR & ( 1 << LOCK ) ) {
+	if(  kFLASH.FLASH_CR  &  (  1 << LOCK  )  ) {
 		kFLASH.FLASHKEY = F_KEY1;
 		kFLASH.FLASHKEY = F_KEY2;
 	}
 
-	kFLASH.FLASH_CR |= ( 1 << PSIZE );
+	kFLASH.FLASH_CR |= (  1 << PSIZE  );
 
 }
 
@@ -75,7 +76,7 @@ OTAFUS void flash_write( u32 addr, u16 data, u8 lock ) {
 	kFLASH.FLASH_CR &= ~( 3 << PSIZE );
 	kFLASH.FLASH_CR |= ( 1 << PSIZE );
 	kFLASH.FLASH_CR |= ( 1 << PG );
-	*( ( u16* ) addr ) = data;
+	*(  (  u16*  ) addr  ) = data;
 	kFLASH.FLASH_CR &= ~( 1 << PG );
 
 	if( lock )
@@ -98,4 +99,7 @@ OTAFUS void ota_memset(  void* ptr, u8 value, u32 size  ) {
 }
 
 OTAFUS void trigger_update() {
+
+	disable_interrupt();
+
 }

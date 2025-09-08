@@ -171,8 +171,8 @@ OTAFUS void flash_unlock(  void  );
 OTAFUS void flash_lock(  void  );
 OTAFUS void flash_erase(  void  );
 OTAFUS void flash_write(  u32 addr, u16 data, u8 lock  );
-OTAFUS void SPI1_transmit(  u8 data  );
-OTAFUS u8 SPI1_receive(  void  );
+OTAFUS void SPI1_transmit(  u16 data  );
+OTAFUS u16 SPI1_receive(  void  );
 OTAFUS void trigger_update(  void  );
 OTAFUS void ota_memset(  void*, u8, u32  );
 
